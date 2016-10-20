@@ -707,7 +707,8 @@ class RecipeNoteItem(pg.TreeWidgetItem):
         self.addChild(self.textItem)
         self.editor = RichTextEdit()
         self.textItem.setWidget(0, self.editor)
-        self.editor.setHtml(recipe.notes)
+        if recipe.notes is not None:
+            self.editor.setHtml(recipe.notes)
         self.editor.textChanged.connect(self.textChanged)
         
     def textChanged(self):
