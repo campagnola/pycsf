@@ -31,4 +31,4 @@ Requirements
 
 * Python 2.7
 * numpy
-* pyqtgraph from github.com/acq4/pyqtgraph
+* pyqtgraph from http://github.com/campagnola/pyqtgraph/tree/pycsf
