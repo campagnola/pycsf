@@ -1,4 +1,4 @@
-import json
+import os, json
 from pyqtgraph.Qt import QtGui, QtCore
 from .core import SolutionDatabase
 from .reagentEditor import ReagentEditorWidget
@@ -16,6 +16,11 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         self.currentFile = None
         
         QtGui.QMainWindow.__init__(self)
+        
+        icon = os.path.join(os.path.dirname(__file__), 'flask.png')
+        if os.path.isfile(icon):
+            self.setWindowIcon(QtGui.QIcon(icon))
+        
         self.resize(1200, 800)
         self.tabs = QtGui.QTabWidget()
         self.setCentralWidget(self.tabs)
