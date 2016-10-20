@@ -152,7 +152,7 @@ class AdderItem(pg.TreeWidgetItem):
             w.popup(pt)
         
     def addSelected(self, action):
-        self.clicked.emit(self, action.text())
+        self.clicked.emit(self, str(action.text()))
         
         
 

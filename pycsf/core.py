@@ -542,3 +542,15 @@ class SolutionDatabase(QtCore.QObject):
         self.reagents.restore(state['reagents'])
         self.solutions.restore(state['solutions'])
         self.recipes.restore(state['recipes'])
+
+    def saveFile(self, filename):
+        """Save the state of this database to a JSON-formatted file.
+        """
+        json.dump(self.save(), open(filename, 'wb'), indent=2)
+
+    def loadFile(self, filename):
+        """Restore the database state from a JSON-formatted file.
+        """
+        state = json.load(open(filename, 'rb'))
+        self.restore(state)
+        

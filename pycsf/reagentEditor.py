@@ -57,7 +57,7 @@ class ReagentEditorWidget(QtGui.QWidget):
             if name not in names:
                 break
             i += 1
-        self.db.reagents.add(name=name, group=item.text(0))
+        self.db.reagents.add(name=name, group=str(item.text(0)))
         self.updateReagentList()
 
     def updateReagentList(self):
@@ -124,7 +124,7 @@ class ReagentItem(QtGui.QTreeWidgetItem):
 
         # string / float types need to be handled differently
         if ftype.kind in 'uif':
-            v = float(editor.text())
+            v = float(str(editor.text()))
             self.setText(col, '%0.2f'%v)
         else:
             v = str(editor.text())

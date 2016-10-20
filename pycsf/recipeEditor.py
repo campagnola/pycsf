@@ -244,7 +244,7 @@ class RecipeEditorWidget(QtGui.QWidget):
         rsl.setCurrentItem(item, 0, QtGui.QItemSelectionModel.SelectCurrent)
             
     def recipeSetItemChanged(self, item, col):
-        item.recipeSet.name = item.text(0)
+        item.recipeSet.name = str(item.text(0))
 
     def recipeSetCopyClicked(self, rsetItem):
         names = [rs.name for rs in self.db.recipes]
@@ -270,7 +270,7 @@ class RecipeEditorWidget(QtGui.QWidget):
             if item is None:
                 xlabels.append(None)
             else:
-                xlabels.append(item.text())
+                xlabels.append(str(item.text()))
                 item.setText('')
         
         # resize columns
@@ -317,7 +317,7 @@ class RecipeEditorWidget(QtGui.QWidget):
             s = False
             for row in (0, 1):
                 item = table.item(row, col)
-                if item is not None and item.text() == '+':
+                if item is not None and str(item.text()) == '+':
                     s = True
                     break
             skip.append(s)
@@ -350,7 +350,7 @@ class RecipeEditorWidget(QtGui.QWidget):
                         t = ''
                         style = ''
                     else:
-                        t = w.text()
+                        t = str(w.text())
                         fs = w.font().pointSize()
                         a = w.alignment()
                         if a & QtCore.Qt.AlignRight > 0:
@@ -514,7 +514,7 @@ class SolutionItemGroup(QtCore.QObject):
     def volumeChanged(self):
         vols = []
         for i, item in enumerate(self.volumeItems):
-            t = item.text()
+            t = str(item.text())
             if t == '':
                 continue
             else:
@@ -577,7 +577,7 @@ class SolutionItem(TableWidgetItem):
             
     def selectionChanged(self):
         action = self.tableWidget().sender()
-        text = action.text().strip()
+        text = str(action.text()).strip()
         self.sigChanged.emit(self, text)
 
     def itemClicked(self):
@@ -663,7 +663,7 @@ class ReagentItem(TableWidgetItem):
         self.menu.popup(tw.mapToGlobal(QtCore.QPoint(x, y)))
         
     def stockTextChanged(self):
-        t = self.concEdit.text.text()
+        t = str(self.concEdit.text.text())
         if t == '':
             conc = None
         else:
@@ -712,13 +712,13 @@ class RecipeNoteItem(pg.TreeWidgetItem):
         self.editor.textChanged.connect(self.textChanged)
         
     def textChanged(self):
-        if self.editor.toPlainText().strip() == '':
+        if str(self.editor.toPlainText()).strip() == '':
             self.recipe.notes = None
         else:
             self.recipe.notes = self.editor.toHtml()
     
     def noteHtml(self):
-        if self.editor.toPlainText().strip() == '':
+        if str(self.editor.toPlainText()).strip() == '':
             return ''
         note = self.editor.toHtml()
         return "<b>%s</b><br>\n%s" % (self.recipe.solution.name, note) 

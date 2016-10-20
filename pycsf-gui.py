@@ -9,14 +9,17 @@ from pyqtgraph import QtGui, QtCore
 from pycsf.editor import SolutionEditorWindow
 from pycsf.core import SolutionDatabase
 
-
 app = QtGui.QApplication([])
 
+#import pyqtgraph as pg
+#pg.dbg()
+
+
 db = SolutionDatabase()
-if len(sys.argv) > 1:
-    db.restore(sys.argv[1])
-    
 w = SolutionEditorWindow(db=db)
+if len(sys.argv) > 1:
+    w.loadFile(sys.argv[1])
+
 w.show()
 w.tabs.setCurrentIndex(2)
 

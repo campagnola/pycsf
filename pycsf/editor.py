@@ -34,7 +34,7 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         self.tabs.setCurrentWidget(self.solutionEditor)
 
         self.fileMenu = self.menuBar().addMenu('&File')
-        self.fileMenu.addAction('Open', self.restore)
+        self.fileMenu.addAction('Open', self.loadFile)
         self.fileMenu.addAction('Save', self.save)
         self.fileMenu.addAction('Save As', self.saveAs)
 
@@ -46,7 +46,7 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         if self.currentFile is None:
             self.saveAs()
         else:
-            json.dump(self.db.save(), open(self.currentFile, 'wb'), indent=2)
+            self.db.saveFile(self.currentFile)
         
     def saveAs(self):
         fname = QtGui.QFileDialog.getSaveFileName()
@@ -55,14 +55,14 @@ class SolutionEditorWindow(QtGui.QMainWindow):
             self.setWindowTitle('Solution Editor: ' + fname)
             self.save()
         
-    def restore(self):
-        fname = QtGui.QFileDialog.getOpenFileName()
+    def loadFile(self, fname=None):
+        if fname is None:
+            fname = QtGui.QFileDialog.getOpenFileName()
         if fname is None:
             return
         self.currentFile = fname
         self.setWindowTitle('Solution Editor: ' + fname)
-        state = json.load(open(fname, 'rb'))
-        self.db.restore(state)
+        self.db.loadFile(fname)
         self.reagentEditor.updateReagentList()
         self.solutionEditor.updateSolutionList()
         self.solutionEditor.updateSolutionTree()

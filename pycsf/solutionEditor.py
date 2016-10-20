@@ -207,7 +207,7 @@ class SolutionEditorWidget(QtGui.QWidget):
         count = 2
         while True:
             try:
-                self.db.solutions.add(name=name, group=item.text(0))
+                self.db.solutions.add(name=name, group=str(item.text(0)))
                 break
             except NameError:
                 name = basename + '%d'%count
@@ -325,7 +325,7 @@ class ReagentItem(pg.TreeWidgetItem):
     
     def setModelData(self, editor, model, col):
         sol = self.solutions[col-1]
-        t = editor.text()
+        t = str(editor.text())
         if t == '':
             sol[self.name] = None
         else:
@@ -378,7 +378,7 @@ class SolutionTypeItem(pg.TreeWidgetItem):
             self.setText(i+1, sol.type)
             
     def itemClicked(self, col):
-        text = 'external' if self.text(col) == 'internal' else 'internal'
+        text = 'external' if str(self.text(col)) == 'internal' else 'internal'
         self.setText(col, text)
         self.solutions[col-1].type = text
         self.sigChanged.emit(self)
@@ -400,7 +400,11 @@ class ReverseAgainstItem(pg.TreeWidgetItem):
     def setSolutions(self, solutions):
         self.solutions = solutions
         for i,sol in enumerate(solutions):
-            self.setText(i+1, sol.compareAgainst)
+            if sol.compareAgainst is None:
+                #self.setText(i+1, '')
+                pass
+            else:
+                self.setText(i+1, sol.compareAgainst)
             
     def setAllSolutions(self, solutions):
         for menu, soltyp in [(self.internalMenu, 'internal'), (self.externalMenu, 'external')]:
@@ -422,7 +426,7 @@ class ReverseAgainstItem(pg.TreeWidgetItem):
             
     def selectionChanged(self):
         action = self.treeWidget().sender()
-        text = action.text().strip()
+        text = str(action.text()).strip()
         self.setText(self._activeColumn, text)
         self.solutions[self._activeColumn-1].compareAgainst = text
         self.sigChanged.emit(self)
