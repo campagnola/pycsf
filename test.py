@@ -4,10 +4,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 import faulthandler
 faulthandler.enable()
 
-from acq4.pyqtgraph import QtGui, QtCore
-from acq4.modules.SolutionEditor.editor import SolutionEditorWindow
-from acq4.modules.SolutionEditor.core import Solution, Recipe, RecipeSet, SolutionDatabase
+from pyqtgraph import QtGui, QtCore
+from pycsf.editor import SolutionEditorWindow
+from pycsf.core import Solution, Recipe, RecipeSet, SolutionDatabase
 
+app = QtGui.QApplication([])
 #import pyqtgraph as pg
 #pg.dbg()
 
