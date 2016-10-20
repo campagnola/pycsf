@@ -76,4 +76,4 @@ class Ui_recipeEditor(object):
         self.copyHtmlBtn.setText(_translate("recipeEditor", "Copy HTML", None))
         self.notesTree.headerItem().setText(0, _translate("recipeEditor", "Notes", None))
 
-from acq4.pyqtgraph import TreeWidget
+from pyqtgraph import TreeWidget

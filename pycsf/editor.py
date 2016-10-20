@@ -1,5 +1,5 @@
 import json
-from acq4.pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore
 from .core import SolutionDatabase
 from .reagentEditor import ReagentEditorWidget
 from .solutionEditor import SolutionEditorWidget

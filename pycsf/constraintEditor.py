@@ -1,4 +1,4 @@
-from acq4.pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore
 from .constraintEditorTemplate import Ui_constraintEditor
 
 

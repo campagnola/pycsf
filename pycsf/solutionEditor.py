@@ -1,5 +1,5 @@
-import acq4.pyqtgraph as pg
-from acq4.pyqtgraph.Qt import QtGui, QtCore
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui, QtCore
 from .core import IONS
 from .treeWidget import ItemDelegate, GroupItem, HtmlItem
 from .solutionEditorTemplate import Ui_solutionEditor

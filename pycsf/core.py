@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import json
 import numpy as np
-from acq4.pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore
 
 
 IONS = OrderedDict([('Na', 1), ('K', 1), ('Cl', -1), ('Ca', 2), ('Mg', 2), ('SO4', -2), ('PO4', -3), ('Cs', 1)])

@@ -1,7 +1,7 @@
 import re
 from collections import OrderedDict
-import acq4.pyqtgraph as pg
-from acq4.pyqtgraph.Qt import QtGui, QtCore
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui, QtCore
 from .core import RecipeSet, Recipe
 from .treeWidget import AdderItem
 from .textEditor import RichTextEdit

@@ -112,4 +112,4 @@ class Ui_solutionEditor(object):
         self.reverseTempSpin.setSuffix(_translate("solutionEditor", "C", None))
 
 from .textEditor import RichTextEdit
-from acq4.pyqtgraph import TreeWidget
+from pyqtgraph import TreeWidget

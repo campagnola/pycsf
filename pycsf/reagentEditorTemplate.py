@@ -73,4 +73,4 @@ class Ui_reagentEditor(object):
         self.reagentTree.setSortingEnabled(__sortingEnabled)
 
 from .textEditor import RichTextEdit
-from acq4.pyqtgraph import TreeWidget
+from pyqtgraph import TreeWidget

@@ -1,6 +1,6 @@
 from collections import OrderedDict
-import acq4.pyqtgraph as pg
-from acq4.pyqtgraph.Qt import QtGui, QtCore
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui, QtCore
 from .treeWidget import GroupItem, ItemDelegate
 from .reagentEditorTemplate import Ui_reagentEditor
 
