@@ -1,5 +1,5 @@
 from collections import OrderedDict
-import json
+import os, json, tempfile
 import numpy as np
 from pyqtgraph.Qt import QtGui, QtCore
 
@@ -546,7 +546,20 @@ class SolutionDatabase(QtCore.QObject):
     def saveFile(self, filename):
         """Save the state of this database to a JSON-formatted file.
         """
-        json.dump(self.save(), open(filename, 'wb'), indent=2)
+        fh, tmpfile = tempfile.mkstemp()
+        try:
+            try:
+                os.close(fh)
+                fh = open(tmpfile, 'wb')
+                json.dump(self.save(), fh, indent=2)
+            finally:
+                fh.close()
+            os.rename(tmpfile, filename)
+        except Exception as exc:
+            QtGui.QMessageBox.warning(None, "ERROR", "File save failed: " + exc.message)
+            if os.path.isfile(tmpfile):
+                os.remove(tmpfile)
+            raise
 
     def loadFile(self, filename):
         """Restore the database state from a JSON-formatted file.
