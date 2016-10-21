@@ -715,10 +715,10 @@ class RecipeNoteItem(pg.TreeWidgetItem):
         if str(self.editor.toPlainText()).strip() == '':
             self.recipe.notes = None
         else:
-            self.recipe.notes = self.editor.toHtml()
+            self.recipe.notes = unicode(self.editor.toHtml())
     
     def noteHtml(self):
         if str(self.editor.toPlainText()).strip() == '':
             return ''
-        note = self.editor.toHtml()
+        note = unicode(self.editor.toHtml())
         return "<b>%s</b><br>\n%s" % (self.recipe.solution.name, note) 
