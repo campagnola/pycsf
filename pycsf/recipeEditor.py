@@ -1,3 +1,4 @@
+import os
 import re
 from collections import OrderedDict
 import pyqtgraph as pg
@@ -387,9 +388,12 @@ class RecipeEditorWidget(QtGui.QWidget):
         txt += '\n</div>'
         
         # copy to clipboard
-        md = QtCore.QMimeData()
-        md.setHtml(txt)
-        QtGui.QApplication.clipboard().setMimeData(md)
+        if os.sys.platform in ['darwin']:
+            QtGui.QApplication.clipboard().setText(txt)
+        else:
+            md = QtCore.QMimeData()
+            md.setHtml(txt)
+            QtGui.QApplication.clipboard().setMimeData(md)
 
 
 class StyleDelegate(QtGui.QStyledItemDelegate):
@@ -500,7 +504,7 @@ class SolutionItemGroup(QtCore.QObject):
                 if stock is None:
                     mw = self.db.reagents[reagent]['molweight']
                     mass = float((vol * 1e-3) * (conc * 1e-3) * (mw * 1e3))
-                    item.setText('%d' % mass)
+                    item.setText('%.1f' % mass)
                     item.setForeground(QtGui.QColor(0, 0, 0))
                 else:
                     rvol = float((vol * 1e-3) * (conc * 1e-3) / (stock * 1e-3))
