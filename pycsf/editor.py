@@ -48,6 +48,9 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         self.reagentEditor.updateReagentList()
         
     def save(self):
+        # clear focus to trigger any pending editor updates
+        QtGui.QApplication.focusWidget().clearFocus()
+        
         if self.currentFile is None:
             self.saveAs()
         else:
