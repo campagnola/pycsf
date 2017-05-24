@@ -1,4 +1,5 @@
 from pyqtgraph.Qt import QtGui, QtCore
+import re
 
 
 class RichTextEdit(QtGui.QTextEdit):
@@ -18,3 +19,15 @@ class RichTextEdit(QtGui.QTextEdit):
             self.setFontUnderline(not self.fontUnderline())
         else:
             return QtGui.QTextEdit.keyPressEvent(self, ev)
+
+    def toHtml(self):
+        html = str(QtGui.QTextEdit.toHtml(self))
+        
+        # Strip off boilerplate html. This should make the JSON easier to
+        # read without affecting the text.
+        html = re.sub('.*<body [^>]+>', '', html.replace('\n', ''))
+        html = re.sub('</body></html>', '', html)
+        html = re.subn('</p>', '<br/>', html)[0]
+        html = re.subn('<p [^>]+>', '', html)[0]
+        
+        return html.strip()
