@@ -286,7 +286,7 @@
       "SO4": 0.0, 
       "PO4": 0.0, 
       "Cs": 0.0, 
-      "notes": "<br /><br/>"
+      "notes": ""
     }, 
     {
       "group": "Metabolites", 
@@ -354,7 +354,7 @@
     }, 
     {
       "group": "Divalent Ions", 
-      "name": "magnesium sulfate", 
+      "name": "magnesium sulfate heptahydrate", 
       "formula": "MgSO4 (7H2O)", 
       "molweight": 246.47999999999999, 
       "osmconst": 2.0, 
@@ -370,7 +370,7 @@
     }, 
     {
       "group": "Divalent Ions", 
-      "name": "calcium chloride", 
+      "name": "calcium chloride dihydrate", 
       "formula": "CaCl2 (2H2O)", 
       "molweight": 147.02000000000001, 
       "osmconst": 3.0, 
@@ -402,7 +402,7 @@
     }, 
     {
       "group": "Divalent Ions", 
-      "name": "magnesium chloride", 
+      "name": "magnesium chloride hexahydrate", 
       "formula": "MgCl2 (6H2O)", 
       "molweight": 203.31, 
       "osmconst": 3.0, 
@@ -692,7 +692,7 @@
       "group": "Misc", 
       "name": "taurine", 
       "formula": "", 
-      "molweight": 0.0, 
+      "molweight": 125.15000000000001, 
       "osmconst": 1.0, 
       "Na": 0.0, 
       "K": 0.0, 
@@ -708,7 +708,7 @@
       "group": "Misc", 
       "name": "thiourea", 
       "formula": "", 
-      "molweight": 0.0, 
+      "molweight": 76.120000000000005, 
       "osmconst": 1.0, 
       "Na": 0.0, 
       "K": 0.0, 
@@ -724,7 +724,7 @@
       "group": "Misc", 
       "name": "kyneurenic acid", 
       "formula": "", 
-      "molweight": 0.0, 
+      "molweight": 189.16999999999999, 
       "osmconst": 1.0, 
       "Na": 0.0, 
       "K": 0.0, 
@@ -772,7 +772,7 @@
       "group": "Acids/bases", 
       "name": "potassium hydroxide", 
       "formula": "KOH", 
-      "molweight": 0.0, 
+      "molweight": 56.109999999999999, 
       "osmconst": 1.0, 
       "Na": 0.0, 
       "K": 1.0, 
