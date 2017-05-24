@@ -49,7 +49,9 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         
     def save(self):
         # clear focus to trigger any pending editor updates
-        QtGui.QApplication.focusWidget().clearFocus()
+        fw = QtGui.QApplication.focusWidget()
+        if fw is not None:
+            fw.clearFocus()
         
         if self.currentFile is None:
             self.saveAs()
