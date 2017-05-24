@@ -502,7 +502,13 @@ class SolutionDatabase(QtCore.QObject):
             try:
                 os.close(fh)
                 fh = open(tmpfile, 'wb')
-                json.dump(self.save(), fh, indent=2)
+                # temporarily override json float encoder
+                try:
+                    orig = json.encoder.FLOAT_REPR
+                    json.encoder.FLOAT_REPR = lambda o: format(np.round(o, 12), '.12g')
+                    json.dump(self.save(), fh, indent=2)
+                finally:
+                    json.encoder.FLOAT_REPR = orig
             finally:
                 fh.close()
             os.rename(tmpfile, filename)
