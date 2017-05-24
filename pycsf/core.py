@@ -7,57 +7,6 @@ from pyqtgraph.Qt import QtGui, QtCore
 IONS = OrderedDict([('Na', 1), ('K', 1), ('Cl', -1), ('Ca', 2), ('Mg', 2), ('SO4', -2), ('PO4', -3), ('Cs', 1)])
 
 
-DEFAULT_REAGENTS = [
-    ('Monovalent Ions', 'sodium chloride', 'NaCl', 58.44, 1.84, 1, 0, 1),
-    ('Monovalent Ions', 'potassium chloride', 'KCl', 74.56, 1.84, 0, 1, 1),
-    ('Monovalent Ions', 'potassium phosphate monobasic', 'KH2PO4', 136.09, 2.0, 0, 1, 0, 0, 0, 0, 1),
-    ('Monovalent Ions', 'potassium gluconate', '', 234.2, 2.0, 0, 1),
-    ('Monovalent Ions', 'cesium methanesulfonate', 'CsMeSO3', 228.0, 2.0, 0, 0, 0, 0, 0, 0, 0, 1),
-    ('Monovalent Ions', 'cesium chloride', 'CsCl', 168.36, 2.0, 0, 0, 1, 0, 0, 0, 0, 1),
-    ('Sodium Substitutes', 'n-methyl-d-glucamine', 'NMDG', 195.22, 1.0),
-    ('Sodium Substitutes', 'tris HCl', '', 157.6, 2.0, 0, 1),
-    ('Sodium Substitutes', 'tris base', '', 121.1, 1.0),
-    ('Sodium Substitutes', 'choline chloride', '', 139.63, 2.0, 0, 0, 1),
-    ('Buffers', 'sodium bicarbonate', 'NaHCO3', 84.01, 2.0, 1),
-    ('Buffers', 'sodium phosphate monobasic', 'NaH2PO4 (H2O)', 137.99, 2.0, 1, 0, 0, 0, 0, 0, 1),
-    ('Buffers', 'sodium phosphate dibasic', 'Na2HPO4 (7H2O)', 268.1, 3.0, 2, 0, 0, 0, 0, 0, 1),
-    ('Buffers', 'HEPES', '', 238.3, 1.0),
-    ('Sugars', 'glucose', '', 180.16, 1.0),
-    ('Sugars', 'sucrose', '', 342.3, 1.0),
-    ('Sugars', 'myo-inositol', '', 180.16, 1.0),
-    ('Metabolites', 'sodium pyruvate', '', 110.04, 2.0),
-    ('Antioxidants', 'ascorbic acid', '', 176.12, 1.0),
-    ('Antioxidants', 'sodium l-ascorbate', '', 198.11, 2.0, 1),
-    ('Antioxidants', 'n-acetyl-l-cysteine', '', 163.2, 1.0),
-    ('Divalent Ions', 'magnesium sulfate', 'MgSO4 (7H2O)', 246.48, 2.0, 0, 0, 0, 0, 1, 1),
-    ('Divalent Ions', 'calcium chloride', 'CaCl2 (2H2O)', 147.02, 3.0, 0, 0, 2, 1),
-    ('Divalent Ions', 'calcium chloride (anhydrous)', 'CaCl2', 110.98, 3.0, 0, 0, 2, 1),
-    ('Divalent Ions', 'magnesium chloride', 'MgCl2 (6H2O)', 203.31, 3.0, 0, 0, 2, 0, 1),
-    ('Energy sources', 'phosphocreatine bg', '', 453.4, 1.0),
-    ('Energy sources', 'phosphocreatine disodium hydrate', '', 255.08, 3.0, 2),
-    ('Energy sources', 'sodium phosphocreatine', '', 233.09, 2.0, 1),
-    ('Energy sources', 'magnesium ATP', '', 507.2, 2.0, 0, 0, 0, 0, 1),
-    ('Energy sources', 'disodium ATP', '', 551.14, 3.0, 2),
-    ('Energy sources', 'GTP tris', '', 523.2, 2.0),
-    ('Energy sources', 'GTP sodium hydrate', '', 523.18, 2.0, 1),
-    ('Energy sources', 'disodium GTP', '', 0.0, 3.0, 2),
-    ('Toxins', 'picrotoxin', '', 0.0, 1.0),
-    ('Toxins', 'QX314 Cl', '', 298.85, 2.0, 0, 0, 1),
-    ('Markers', 'biocytin', '', 372.48, 1.0),
-    ('Markers', 'AlexaFluor 488', '', 570.48, 0.0, 1.0),
-    ('Markers', 'Lucifer Yellow CH (di-K salt)', '', 521.57, 0.0, 1.0),
-    ('Calcium Buffers', 'EGTA', '', 380.35, 1.0),
-    ('Calcium Buffers', 'BAPTA', '', 476.43, 1.0),
-    ('Misc', 'taurine', '', 0.0, 1.0),
-    ('Misc', 'thiourea', '', 0.0, 1.0),
-    ('Misc', 'kyneurenic acid', '', 0.0, 1.0),
-    ('Acids/bases', 'hydrochloric acid', 'HCl', 36.46, 0.7),
-    ('Acids/bases', 'potassium hydroxide', 'KOH', 0.0, 1.0, 0, 1),
-    ('Acids/bases', 'cesium hydroxide', 'CsOH', 0.0, 1.0, 0, 1),
-]
-
-
-
 class Reagents(QtCore.QObject):
     """A table of reagents and their properties.
     """
@@ -74,9 +23,7 @@ class Reagents(QtCore.QObject):
             ('osmconst', float),
         ] + [(ion, float) for ion in IONS] + [('notes', object)]
         self._null = (None, None, '', 0, 0) + (0,)*len(IONS) + ('',)
-        self._data = np.empty(len(DEFAULT_REAGENTS), dtype=self._dtype)
-        for i, reagent in enumerate(DEFAULT_REAGENTS):
-            self._data[i] = reagent + self._null[len(reagent):]
+        self._data = np.empty(0, dtype=self._dtype)
 
     def remove(self, name):
         try:
@@ -94,6 +41,8 @@ class Reagents(QtCore.QObject):
     
     def restore(self, data):
         self._data = _loadArray(data, self._dtype)
+        self.sigReagentListChanged.emit(self)
+        self.sigReagentDataChanged.emit(self)
 
     def groups(self):
         return np.unique(self._data['group'])
@@ -569,3 +518,6 @@ class SolutionDatabase(QtCore.QObject):
         state = json.load(open(filename, 'rb'))
         self.restore(state)
         
+    def loadDefault(self):
+        deffile = os.path.join(os.path.dirname(__file__), 'default.json')
+        self.loadFile(deffile)

@@ -18,15 +18,11 @@ class ReagentEditorWidget(QtGui.QWidget):
         tree = self.ui.reagentTree
         tree.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
         self.itemDelegate = ItemDelegate(tree)  # allow items to specify their own editors
-        #tree.itemClicked.connect(self.itemClicked)
         tree.itemSelectionChanged.connect(self.selectionChanged)
         self.ui.reagentNotes.textChanged.connect(self.notesChanged)
-        self.updateReagentList()
+        self.reagents.sigReagentListChanged.connect(self.updateReagentList)
         
-    #def itemClicked(self, item, col):
-        #print "item clicked"
-        #if hasattr(item, 'itemClicked'):
-            #item.itemClicked(col)
+        self.updateReagentList()
         
     def selectionChanged(self):
         tree = self.ui.reagentTree
@@ -58,7 +54,6 @@ class ReagentEditorWidget(QtGui.QWidget):
                 break
             i += 1
         self.db.reagents.add(name=name, group=str(item.text(0)))
-        self.updateReagentList()
 
     def updateReagentList(self):
         tree = self.ui.reagentTree
@@ -82,6 +77,7 @@ class ReagentEditorWidget(QtGui.QWidget):
         grpItems = {}
         for reagent in self.reagents:
             item = ReagentItem(reagent)
+            item.sigChanged.connect(self.itemChanged)
             group = reagent['group']
             if group not in grpItems:
                 grpItems[group] = GroupItem(group, adder='add reagent')
@@ -97,11 +93,19 @@ class ReagentEditorWidget(QtGui.QWidget):
         tree.verticalScrollBar().setValue(vpos)
         tree.horizontalScrollBar().setValue(hpos)
 
+    def itemChanged(self, item, field, value):
+        try:
+            self.reagents.sigReagentListChanged.disconnect(self.updateReagentList)
+            item.reagent[field] = value
+        finally:
+            self.reagents.sigReagentListChanged.connect(self.updateReagentList)
+            
+
 
 class ReagentItem(QtGui.QTreeWidgetItem):
     def __init__(self, reagent):
         class SigProxy(QtCore.QObject):
-            sigChanged = QtCore.Signal(object)
+            sigChanged = QtCore.Signal(object, object, object)  # self, field, value
         self._sigprox = SigProxy()
         self.sigChanged = self._sigprox.sigChanged
 
@@ -129,6 +133,5 @@ class ReagentItem(QtGui.QTreeWidgetItem):
         else:
             v = str(editor.text())
             self.setText(col, v)
-        self.reagent[fname] = v
-        self.sigChanged.emit(self)
+        self.sigChanged.emit(self, fname, v)
 

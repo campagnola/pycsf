@@ -19,6 +19,8 @@ db = SolutionDatabase()
 w = SolutionEditorWindow(db=db)
 if len(sys.argv) > 1:
     w.loadFile(sys.argv[1])
+else:
+    db.loadDefault()
 
 w.show()
 w.tabs.setCurrentIndex(2)
