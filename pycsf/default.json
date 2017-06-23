@@ -436,9 +436,9 @@
       "group": "Energy sources", 
       "name": "phosphocreatine disodium hydrate", 
       "formula": "", 
-      "molweight": 255.08, 
-      "osmconst": 3, 
-      "Na": 2, 
+      "molweight": 401.5, 
+      "osmconst": 3.4, 
+      "Na": 2.4, 
       "K": 0, 
       "Cl": 0, 
       "Ca": 0, 
@@ -446,7 +446,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "The MW for phosphocreatine is 255.08 g/mol; however, this does not include the Na and water in the product.<br />For Sigma product P7936 / lot SLBM3120V, the certificate of analysis specifies 23% water and 17.5% sodium (corrected for water). <br /><br />To calculate the effective g/mol of this product:<br />1. Start with the molecular weight 255.08 g/mol<br />2. Add in the 17.5% sodium mass: 255.08 * (1 / (1 - .175)) = 309.2 g/mol<br />3. Add in the 23% water mass: 309.2 * (1 / (1 - 0.23)) =<span style=\" font-weight:600;\"> 401.5 g/mol</span><br /><br />To calculate the concentration of Na in this product:<br />1. Total mass of Na per mol of dry product: 309.2 * 0.175 = 54.1 g/mol<br />2. Mols of Na per mol of product: 54.1 / 22.99 =<span style=\" font-weight:600;\"> 2.4 mol Na / mol product</span><br/>"
     }, 
     {
       "group": "Energy sources", 
@@ -468,17 +468,17 @@
       "group": "Energy sources", 
       "name": "magnesium ATP", 
       "formula": "", 
-      "molweight": 507.2, 
-      "osmconst": 2, 
+      "molweight": 594.76, 
+      "osmconst": 2.38, 
       "Na": 0, 
       "K": 0, 
       "Cl": 0, 
       "Ca": 0, 
-      "Mg": 1, 
+      "Mg": 1.38, 
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "The MW for ATP is 507.18 g/mol; however, this does not include the Mg and water in the product. <br />For Sigma product A9187 / lot SLBM8694V, the certificate of analysis specifies 3 moles of water per mole of compound, and 6.2% magnesium (dry basis). <br /><br />To calculate the effective g/mol of this product:<br />1. Start with the molecular weight 507.18 g/mol<br />2. Add in the 6.2% magnesium mass: 507.18 * (1 / (1 - .062)) = 540.7 g/mol<br />3. Add in 3 mols water per 1 mol product: 540.7 + 18.02 * 3 = <span style=\" font-weight:600;\">594.76 g/mol </span><br /><br />To calculate the concentration of Mg added by this product:<br />1. Total mass of Mg per mol of dry product: 540.7 * 0.062 = 33.52 g/mol<br />2. Mols of Mg per mol of product: 33.52 / 24.31 = <span style=\" font-weight:600;\">1.38 mol Mg / mol product</span><br/>"
     }, 
     {
       "group": "Energy sources", 
@@ -516,9 +516,9 @@
       "group": "Energy sources", 
       "name": "GTP sodium hydrate", 
       "formula": "", 
-      "molweight": 523.18, 
-      "osmconst": 2, 
-      "Na": 1, 
+      "molweight": 672.3, 
+      "osmconst": 4.1, 
+      "Na": 3.1, 
       "K": 0, 
       "Cl": 0, 
       "Ca": 0, 
@@ -526,7 +526,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "The MW for GTP is 523.18 g/mol; however, this does not include the Na, water, and other impurities in the product.<br />For Sigma product G8877 / lot SLBQ9792V, the certificate of analysis specifies 6.8% water, 11.5% sodium (dry basis), and 95% purity. <br /><br />To calculate the effective g/mol of this product:<br />1. Start with the molecular weight 523.18 g/mol<br />2. Add in the 11.5% sodium and 5% impurity masses: 523.18 * (1 / (1 - .165)) = 626.6 g/mol<br />3. Add in the 6.8% water mass: 626.6 * (1 / (1 - 0.068)) = <span style=\" font-weight:600;\">672.3 g/mol</span><br /><br />To calculate the concentration of Na in this product:<br />1. Total mass of Na per mol of dry product: 626.6 * 0.115 = 72.1 g/mol<br />2. Mols of Na per mol of product: 72.1 / 22.99 =<span style=\" font-weight:600;\"> 3.1 mol Na / mol product</span><br/>"
     }, 
     {
       "group": "Energy sources", 
