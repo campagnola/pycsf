@@ -21,7 +21,7 @@ class RichTextEdit(QtGui.QTextEdit):
             return QtGui.QTextEdit.keyPressEvent(self, ev)
 
     def toHtml(self):
-        html = str(QtGui.QTextEdit.toHtml(self))
+        html = unicode(QtGui.QTextEdit.toHtml(self))
         
         # Strip off boilerplate html. This should make the JSON easier to
         # read without affecting the text.
