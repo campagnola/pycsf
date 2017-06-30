@@ -1,5 +1,5 @@
 from collections import OrderedDict
-import os, json, tempfile
+import os, json, tempfile, weakref
 import numpy as np
 from pyqtgraph.Qt import QtGui, QtCore
 
@@ -142,16 +142,18 @@ class Solutions(QtCore.QObject):
         QtCore.QObject.__init__(self)
         self._data = []
 
-    def add(self, soln=None, name=None, group=None):
+    def add(self, soln=None, name=None, group=None, signal=True):
         if soln is None:
             soln = Solution(name=name, group=group)
         soln.db = self.db
         for s in self._data:
             if s.name == soln.name:
-                raise NameError("Solution with this name already exists.")
+                raise NameError('Cannot add solution "%s"; another solution with this name already exists.' % soln.name)
         self._data.append(soln)
+        soln._setSolutionList(self)
         soln.sigRenamed.connect(self.solutionRenamed)
-        self.solutionListChanged.emit(self)
+        if signal:
+            self.solutionListChanged.emit(self)
     
     def solutionRenamed(self, soln, old):
         new = soln.name
@@ -179,7 +181,8 @@ class Solutions(QtCore.QObject):
         for d in data:
             sol = Solution(db=self.db)
             sol.restore(d)
-            self._data.append(sol)
+            self.add(sol, signal=False)
+            #self._data.append(sol)
         self.solutionListChanged.emit(self)
     
     def save(self):
@@ -239,12 +242,21 @@ class Solution(QtCore.QObject):
         self.ionConcentrations = {}
         self.osmolarity = None
         
+        self._solutionList = None
+        
     @property
     def name(self):
         return self._name
     
     def setName(self, name):
         old = self._name
+        if name == old:
+            return
+        if self._solutionList is not None:
+            sl = self._solutionList()
+            for s in sl:
+                if s.name == name:
+                    raise NameError('Cannot rename to "%s"; another solution with this name already exists.' % name)
         self._name = name
         self.sigRenamed.emit(self, old)
         
@@ -303,6 +315,10 @@ class Solution(QtCore.QObject):
         
         osm = np.sum(concs * reagents['osmconst'])
         return ions, osm
+
+    def _setSolutionList(self, sl):
+        # Just allows solution to ensure that its name is unique when renamed
+        self._solutionList = weakref.ref(sl)
 
 
 def _saveArray(data):

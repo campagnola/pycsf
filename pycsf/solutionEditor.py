@@ -196,9 +196,22 @@ class SolutionEditorWidget(QtGui.QWidget):
             new = str(item.text(0))
             # Note: disconnect here prevents a segfault. Something to do with
             # removing an item during its own edit callback.
-            self.db.solutions.solutionListChanged.disconnect(self.updateSolutionList)
-            item.solution.setName(new)
-            self.db.solutions.solutionListChanged.connect(self.updateSolutionList)
+            try:
+                self.db.solutions.solutionListChanged.disconnect(self.updateSolutionList)
+                reconnect = True
+            except TypeError:
+                reconnect = False
+                pass
+                
+            try:
+                item.solution.setName(new)
+            except Exception:
+                item.resetText()
+                raise
+            finally:
+                if reconnect:
+                    self.db.solutions.solutionListChanged.connect(self.updateSolutionList)
+            
             self.updateSolutionTree()
             
     def addSolutionClicked(self, item):
@@ -360,6 +373,9 @@ class SolutionItem(pg.TreeWidgetItem):
         
     def removeClicked(self):
         self.sigRemoveClicked.emit(self)
+        
+    def resetText(self):
+        self.setText(0, self.solution.name)
 
 
 class SolutionTypeItem(pg.TreeWidgetItem):
