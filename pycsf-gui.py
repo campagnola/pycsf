@@ -13,6 +13,11 @@ app = QtGui.QApplication([])
 
 #import pyqtgraph as pg
 #pg.dbg()
+sysExcepthook = sys.excepthook
+def handleException(*args):
+    sysExcepthook(*args)
+    QtGui.QMessageBox.warning(None, "Oops.", str(args[1]))
+sys.excepthook = handleException    
 
 
 db = SolutionDatabase()
