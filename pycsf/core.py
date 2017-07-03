@@ -288,7 +288,13 @@ class Solution(QtCore.QObject):
         return soln
     
     def save(self):
-        return {'name': self.name, 'group': self.group, 'reagents': self._reagents.copy(),
+        # Sort reagent list before storing to ensure the order is stable
+        # (otherwise diffs become difficult to read)
+        reagents = OrderedDict()
+        for r in sorted(self._reagents.keys()):
+            reagents[r] = self._reagents[r]
+            
+        return {'name': self.name, 'group': self.group, 'reagents': reagents,
                 'type': self.type, 'compareAgainst': self.compareAgainst, 'notes': self.notes}
     
     def restore(self, state):
