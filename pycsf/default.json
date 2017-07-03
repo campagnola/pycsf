@@ -430,12 +430,12 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Energy sources", 
-      "name": "phosphocreatine disodium hydrate", 
-      "formula": "", 
+      "name": "phosphocreatine disodium salt hydrate", 
+      "formula": "phosphocreatine-Na2 ", 
       "molweight": 401.5, 
       "osmconst": 3.4, 
       "Na": 2.4, 
@@ -450,11 +450,11 @@
     }, 
     {
       "group": "Energy sources", 
-      "name": "sodium phosphocreatine", 
-      "formula": "", 
-      "molweight": 233.09, 
-      "osmconst": 2, 
-      "Na": 1, 
+      "name": "phosphocreatine disodium salt tetrahydrate", 
+      "formula": "phosphocreatine-Na2 (4H2O)", 
+      "molweight": 327.14, 
+      "osmconst": 3, 
+      "Na": 2, 
       "K": 0, 
       "Cl": 0, 
       "Ca": 0, 
@@ -462,12 +462,28 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "Tocris 4325, Sigma 27920<br /><br/>"
     }, 
     {
       "group": "Energy sources", 
-      "name": "magnesium ATP", 
-      "formula": "", 
+      "name": "phosphocreatine di(tris) salt", 
+      "formula": "phosphocreatine-di(tris)", 
+      "molweight": 453.38, 
+      "osmconst": 3, 
+      "Na": 0, 
+      "K": 0, 
+      "Cl": 0, 
+      "Ca": 0, 
+      "Mg": 0, 
+      "SO4": 0, 
+      "PO4": 0, 
+      "Cs": 0, 
+      "notes": "The MW for phosphocreatine di(tris) is 453.38 g/mol; however, this does not include the water in the product (roughly 8% for Sigma P1937, but check the certificate of analysis).<br /><br/>"
+    }, 
+    {
+      "group": "Energy sources", 
+      "name": "ATP magnesium salt", 
+      "formula": "ATP-Mg", 
       "molweight": 594.76, 
       "osmconst": 2.38, 
       "Na": 0, 
@@ -482,8 +498,8 @@
     }, 
     {
       "group": "Energy sources", 
-      "name": "disodium ATP", 
-      "formula": "", 
+      "name": "ATP disodium salt hydrate", 
+      "formula": "ATP-Na2", 
       "molweight": 551.14, 
       "osmconst": 3, 
       "Na": 2, 
@@ -494,14 +510,14 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "The MW for ATP disodium hydrate is 453.38 g/mol; however, this does not include the water in the product (roughly 10% for Sigma A2383, but check the certificate of analysis).<br /><br/>"
     }, 
     {
       "group": "Energy sources", 
-      "name": "GTP tris", 
-      "formula": "", 
-      "molweight": 523.2, 
-      "osmconst": 2, 
+      "name": "GTP tris salt", 
+      "formula": "GTP-tris", 
+      "molweight": 886.59, 
+      "osmconst": 4, 
       "Na": 0, 
       "K": 0, 
       "Cl": 0, 
@@ -510,12 +526,12 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "The MW for GTP tris is 886.59 g/mol; however, this does not include the water in the product (roughly 8% for Sigma G9002, but check the certificate of analysis).<br/>"
     }, 
     {
       "group": "Energy sources", 
-      "name": "GTP sodium hydrate", 
-      "formula": "", 
+      "name": "GTP sodium salt hydrate", 
+      "formula": "GTP-xNa", 
       "molweight": 672.3, 
       "osmconst": 4.1, 
       "Na": 3.1, 
@@ -530,9 +546,9 @@
     }, 
     {
       "group": "Energy sources", 
-      "name": "disodium GTP", 
-      "formula": "", 
-      "molweight": 0, 
+      "name": "GTP disodium salt hydrate", 
+      "formula": "GTP-Na2", 
+      "molweight": 567.1, 
       "osmconst": 3, 
       "Na": 2, 
       "K": 0, 
@@ -542,7 +558,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "The MW for ATP disodium salt is 567.10 g/mol; however, this does not include the water in the product.<br /><br/>"
     }, 
     {
       "group": "Toxins", 
@@ -574,7 +590,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Markers", 
@@ -814,7 +830,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }
   ], 
   "recipes": [], 
