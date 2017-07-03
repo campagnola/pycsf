@@ -213,6 +213,8 @@ class SolutionEditorWidget(QtGui.QWidget):
                     self.db.solutions.solutionListChanged.connect(self.updateSolutionList)
             
             self.updateSolutionTree()
+            # can't call updatesolutionlist from here--causes segv.
+            self.reverseAgainstItem.setAllSolutions(self.db.solutions)
             
     def addSolutionClicked(self, item):
         basename = 'New Solution'
@@ -325,7 +327,7 @@ class ReagentItem(pg.TreeWidgetItem):
 
         self.name = name
         self.solutions = solutions
-        pg.TreeWidgetItem.__init__(self, [name] + ['%0.1f'%sol[name] if name in sol.reagentList() else '' for sol in solutions])
+        pg.TreeWidgetItem.__init__(self, [name] + [('%0.4f'%sol[name]).rstrip('0').rstrip('.') if name in sol.reagentList() else '' for sol in solutions])
         self.setFlags(self.flags() | QtCore.Qt.ItemIsEditable)
 
     def createEditor(self, parent, option, col):
