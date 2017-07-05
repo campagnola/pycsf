@@ -3,6 +3,7 @@ import re
 from collections import OrderedDict
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.python2_3 import asUnicode
 from .core import RecipeSet, Recipe
 from .treeWidget import AdderItem
 from .textEditor import RichTextEdit
@@ -362,7 +363,7 @@ class RecipeEditorWidget(QtGui.QWidget):
                             align = 'center'
                         style = 'font-size: %dpt; text-align: %s' % (fs, align)
                 else:
-                    t = str(item.text())
+                    t = asUnicode(item.text())
                     bg = item.background().color().name()
                     fg = item.foreground().color().name()
                     
