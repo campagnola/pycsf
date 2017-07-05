@@ -35,7 +35,7 @@
     {
       "group": "Monovalent Ions", 
       "name": "potassium phosphate monobasic", 
-      "formula": "KH2PO4", 
+      "formula": "KH\u2082PO\u2084", 
       "molweight": 136.09, 
       "osmconst": 2, 
       "Na": 0, 
@@ -46,7 +46,7 @@
       "SO4": 0, 
       "PO4": 1, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Monovalent Ions", 
@@ -67,7 +67,7 @@
     {
       "group": "Monovalent Ions", 
       "name": "cesium methanesulfonate", 
-      "formula": "CsMeSO3", 
+      "formula": "CsMeSO\u2083", 
       "molweight": 228, 
       "osmconst": 2, 
       "Na": 0, 
@@ -78,7 +78,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 1, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Monovalent Ions", 
@@ -163,7 +163,7 @@
     {
       "group": "Buffers", 
       "name": "sodium bicarbonate", 
-      "formula": "NaHCO3", 
+      "formula": "NaHCO\u2083", 
       "molweight": 84.01, 
       "osmconst": 2, 
       "Na": 1, 
@@ -174,12 +174,12 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Buffers", 
       "name": "sodium phosphate monobasic", 
-      "formula": "NaH2PO4 (H2O)", 
+      "formula": "NaH\u2082PO\u2084 (H2O)", 
       "molweight": 137.99, 
       "osmconst": 2, 
       "Na": 1, 
@@ -190,12 +190,12 @@
       "SO4": 0, 
       "PO4": 1, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Buffers", 
       "name": "sodium phosphate dibasic", 
-      "formula": "Na2HPO4 (7H2O)", 
+      "formula": "Na\u2082HPO\u2084 (7H2O)", 
       "molweight": 268.1, 
       "osmconst": 3, 
       "Na": 2, 
@@ -206,7 +206,7 @@
       "SO4": 0, 
       "PO4": 1, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Buffers", 
@@ -355,7 +355,7 @@
     {
       "group": "Divalent Ions", 
       "name": "magnesium sulfate heptahydrate", 
-      "formula": "MgSO4 (7H2O)", 
+      "formula": "MgSO\u2084 (7H2O)", 
       "molweight": 246.48, 
       "osmconst": 2, 
       "Na": 0, 
@@ -366,12 +366,12 @@
       "SO4": 1, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Divalent Ions", 
       "name": "calcium chloride dihydrate", 
-      "formula": "CaCl2 (2H2O)", 
+      "formula": "CaCl\u2082 (2H2O)", 
       "molweight": 147.02, 
       "osmconst": 3, 
       "Na": 0, 
@@ -382,12 +382,12 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Divalent Ions", 
       "name": "calcium chloride (anhydrous)", 
-      "formula": "CaCl2", 
+      "formula": "CaCl\u2082", 
       "molweight": 110.98, 
       "osmconst": 3, 
       "Na": 0, 
@@ -398,12 +398,12 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Divalent Ions", 
       "name": "magnesium chloride hexahydrate", 
-      "formula": "MgCl2 (6H2O)", 
+      "formula": "MgCl\u2082 (6H2O)", 
       "molweight": 203.31, 
       "osmconst": 3, 
       "Na": 0, 
@@ -414,12 +414,12 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": ""
+      "notes": "<br /><br/>"
     }, 
     {
       "group": "Energy sources", 
       "name": "phosphocreatine disodium salt hydrate", 
-      "formula": "phosphocreatine-Na2 ", 
+      "formula": "phosphocreatine-Na\u2082 ", 
       "molweight": 401.5, 
       "osmconst": 3.4, 
       "Na": 2.4, 
@@ -435,7 +435,7 @@
     {
       "group": "Energy sources", 
       "name": "phosphocreatine disodium salt tetrahydrate", 
-      "formula": "phosphocreatine-Na2 (4H2O)", 
+      "formula": "phosphocreatine-Na\u2082 (4H2O)", 
       "molweight": 327.14, 
       "osmconst": 3, 
       "Na": 2, 
@@ -462,7 +462,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": "The MW for phosphocreatine di(tris) is 453.38 g/mol; however, this does not include the water in the product (roughly 8% for Sigma P1937, but check the certificate of analysis).<br /><br/>"
+      "notes": "The MW for phosphocreatine di(tris) is 453.38 g/mol; however, this does not include the water in the product (roughly 8% for Sigma P1937, but check the certificate of analysis).<br /><br />Note: it's possible tris could affect K<span style=\" font-family:'Open Sans,Helvetica Neue,Helvetica,Arial,sans-serif'; font-size:14px; color:#333333; background-color:#f9f9f9;\">\u207a</span> currents at high enough concentration. This reagent should probably be avoided except where K<span style=\" font-family:'Open Sans,Helvetica Neue,Helvetica,Arial,sans-serif'; font-size:14px; color:#333333; background-color:#f9f9f9;\">\u207a</span> channels are already blocked.<br/>"
     }, 
     {
       "group": "Energy sources", 
@@ -483,7 +483,7 @@
     {
       "group": "Energy sources", 
       "name": "ATP disodium salt hydrate", 
-      "formula": "ATP-Na2", 
+      "formula": "ATP-Na\u2082", 
       "molweight": 551.14, 
       "osmconst": 3, 
       "Na": 2, 
@@ -531,7 +531,7 @@
     {
       "group": "Energy sources", 
       "name": "GTP disodium salt hydrate", 
-      "formula": "GTP-Na2", 
+      "formula": "GTP-Na\u2082", 
       "molweight": 567.1, 
       "osmconst": 3, 
       "Na": 2, 
