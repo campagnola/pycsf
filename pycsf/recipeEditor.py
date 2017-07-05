@@ -7,7 +7,7 @@ from .core import RecipeSet, Recipe
 from .treeWidget import AdderItem
 from .textEditor import RichTextEdit
 from .recipeEditorTemplate import Ui_recipeEditor
-
+from .format_float import format_float
 """
 TODO:
  - highlight row/column headers for selected cell
@@ -162,7 +162,7 @@ class RecipeEditorWidget(QtGui.QWidget):
             table.setItem(1, col, header)
             for row, reagent in enumerate(reagentOrder):
                 mw = self.db.reagents[reagent]['molweight']
-                ritem = TableWidgetItem('%0.1f' % mw)
+                ritem = TableWidgetItem(format_float(mw))
                 table.setItem(row+2, col, ritem)
             col += 1
             
@@ -464,7 +464,7 @@ class SolutionItemGroup(QtCore.QObject):
             self.table.setItem(1, col, header)
             for row, reagent in enumerate(self.reagentOrder):
                 conc = self.recipe.solution[reagent]
-                conc = '' if conc is None else '%0.1f' % conc
+                conc = '' if conc is None else format_float(conc)
                 ritem = TableWidgetItem(conc)
                 self.table.setItem(row+2, col, ritem)
             col += 1
@@ -504,11 +504,11 @@ class SolutionItemGroup(QtCore.QObject):
                 if stock is None:
                     mw = self.db.reagents[reagent]['molweight']
                     mass = float((vol * 1e-3) * (conc * 1e-3) * (mw * 1e3))
-                    item.setText('%.1f' % mass)
+                    item.setText(format_float(mass))
                     item.setForeground(QtGui.QColor(0, 0, 0))
                 else:
                     rvol = float((vol * 1e-3) * (conc * 1e-3) / (stock * 1e-3))
-                    item.setText('%.4g' % rvol)
+                    item.setText(format_float(rvol))
                     item.setForeground(QtGui.QColor(0, 0, 200))
         
     def addVolumeClicked(self):
@@ -649,7 +649,7 @@ class ReagentItem(TableWidgetItem):
         self.concEdit = LabeledLineEdit('Stock concentration:', self.menu)
         self.concEdit.text.setPlaceholderText('[ none ]')
         if stock is not None:
-            self.concEdit.text.setText('%0.2f' % stock)
+            self.concEdit.text.setText(format_float(stock))
         self.action.setDefaultWidget(self.concEdit)
         self.menu.addAction(self.action)
         self.concEdit.editingFinished.connect(self.stockTextChanged)
@@ -657,7 +657,7 @@ class ReagentItem(TableWidgetItem):
         self.updateText(stock)
         
     def updateText(self, stock):
-        text = self.reagent + ('' if stock is None else ' (%0.2fM)'%stock)
+        text = self.reagent + ('' if stock is None else ' (%sM)'%format_float(stock))
         self.setText(text)
         
     def itemClicked(self):

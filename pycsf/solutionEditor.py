@@ -3,6 +3,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 from .core import IONS
 from .treeWidget import ItemDelegate, GroupItem, HtmlItem
 from .solutionEditorTemplate import Ui_solutionEditor
+from .format_float import format_float
 
 
 class SolutionEditorWidget(QtGui.QWidget):
@@ -309,13 +310,13 @@ class SolutionEditorWidget(QtGui.QWidget):
         for i, soln in enumerate(self.selectedSolutions):
             ions, osm, revs = results[soln.name]
             for ion in IONS:
-                self.estIonConcItems[ion].setText(i+1, '%0.1f'%ions[ion])
+                self.estIonConcItems[ion].setText(i+1, format_float(ions[ion]))
                 if revs[ion] is None:
                     self.ionReversalItems[ion].setText(i+1, '')
                 else:
-                    self.ionReversalItems[ion].setText(i+1, '%0.1f'%revs[ion])
+                    self.ionReversalItems[ion].setText(i+1, format_float(revs[ion]))
                     
-            self.solnTreeItems['Osmolarity (estimated)'].setText(i+1, '%0.1f'%osm)
+            self.solnTreeItems['Osmolarity (estimated)'].setText(i+1, format_float(osm))
         
 
 class ReagentItem(pg.TreeWidgetItem):
@@ -327,7 +328,7 @@ class ReagentItem(pg.TreeWidgetItem):
 
         self.name = name
         self.solutions = solutions
-        pg.TreeWidgetItem.__init__(self, [name] + [('%0.4f'%sol[name]).rstrip('0').rstrip('.') if name in sol.reagentList() else '' for sol in solutions])
+        pg.TreeWidgetItem.__init__(self, [name] + [format_float(sol[name]) if name in sol.reagentList() else '' for sol in solutions])
         self.setFlags(self.flags() | QtCore.Qt.ItemIsEditable)
 
     def createEditor(self, parent, option, col):
