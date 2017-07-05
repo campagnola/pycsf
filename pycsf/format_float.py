@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def format_float(x, precision=3):
+def formatFloat(x, precision=3):
     """Default formatting for displaying float values.
     
     * Chooses number of decimal places based on desired precision

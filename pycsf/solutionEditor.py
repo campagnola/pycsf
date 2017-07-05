@@ -1,9 +1,10 @@
+import os
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
 from .core import IONS
 from .treeWidget import ItemDelegate, GroupItem, HtmlItem
 from .solutionEditorTemplate import Ui_solutionEditor
-from .format_float import format_float
+from .format_float import formatFloat
 
 
 class SolutionEditorWidget(QtGui.QWidget):
@@ -78,6 +79,7 @@ class SolutionEditorWidget(QtGui.QWidget):
         self.solutionTypeItem.sigChanged.connect(self.recalculate)
         self.reverseAgainstItem.sigChanged.connect(self.recalculate)
         self.ui.notesText.textChanged.connect(self.notesTextChanged)
+        self.ui.copyHtmlBtn.clicked.connect(self.copyHtml)
 
         self.ui.solutionTable.itemSelectionChanged.connect(self.selectionChanged)
         self.ui.solutionTable.itemClicked.connect(self.itemClicked)
@@ -310,13 +312,48 @@ class SolutionEditorWidget(QtGui.QWidget):
         for i, soln in enumerate(self.selectedSolutions):
             ions, osm, revs = results[soln.name]
             for ion in IONS:
-                self.estIonConcItems[ion].setText(i+1, format_float(ions[ion]))
+                self.estIonConcItems[ion].setText(i+1, formatFloat(ions[ion]))
                 if revs[ion] is None:
                     self.ionReversalItems[ion].setText(i+1, '')
                 else:
-                    self.ionReversalItems[ion].setText(i+1, format_float(revs[ion]))
+                    self.ionReversalItems[ion].setText(i+1, formatFloat(revs[ion]))
                     
-            self.solnTreeItems['Osmolarity (estimated)'].setText(i+1, format_float(osm))
+            self.solnTreeItems['Osmolarity (estimated)'].setText(i+1, formatFloat(osm))
+
+    def copyHtml(self):
+        txt = '<table>\n'
+        txt += self._itemToHtml(self.ui.solutionTable, self.ui.solutionTable.headerItem())
+        root = self.ui.solutionTable.invisibleRootItem()
+        for i in range(root.childCount()):
+            txt += self._itemToHtml(self.ui.solutionTable, root.child(i))
+        txt += '</table>\n'
+
+        # copy to clipboard
+        if os.sys.platform in ['darwin']:
+            QtGui.QApplication.clipboard().setText(txt)
+        else:
+            md = QtCore.QMimeData()
+            md.setHtml(txt)
+            QtGui.QApplication.clipboard().setMimeData(md)
+        
+    def _itemToHtml(self, tree, item):
+        txt = "  <tr>\n"
+        for i in range(tree.columnCount()):
+            width = tree.header().sectionSize(i)
+            t = str(item.text(i))
+            bg = item.background(i)
+            fg = item.foreground(i)
+            style = ''
+            if bg.isOpaque():
+                style += 'background-color: %s; ' % bg.color().name()
+            if fg.isOpaque():
+                style += 'color: %s; ' % fg.color().name()
+                
+            txt += '    <td style="font-family: sans-serif; font-size: 10pt; vertical-align: middle; width: %dpx; %s">%s</td>\n' % (width, style, t)
+        txt += "\n  </tr>\n"
+        for i in range(item.childCount()):
+            txt += self._itemToHtml(tree, item.child(i))
+        return txt
         
 
 class ReagentItem(pg.TreeWidgetItem):
@@ -328,7 +365,7 @@ class ReagentItem(pg.TreeWidgetItem):
 
         self.name = name
         self.solutions = solutions
-        pg.TreeWidgetItem.__init__(self, [name] + [format_float(sol[name]) if name in sol.reagentList() else '' for sol in solutions])
+        pg.TreeWidgetItem.__init__(self, [name] + [formatFloat(sol[name]) if name in sol.reagentList() else '' for sol in solutions])
         self.setFlags(self.flags() | QtCore.Qt.ItemIsEditable)
 
     def createEditor(self, parent, option, col):

@@ -77,10 +77,15 @@ class Ui_solutionEditor(object):
         self.label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.gridLayout.addWidget(self.label_4, 0, 0, 1, 1)
+        self.copyHtmlBtn = QtGui.QPushButton(self.layoutWidget1)
+        self.copyHtmlBtn.setObjectName(_fromUtf8("copyHtmlBtn"))
+        self.gridLayout.addWidget(self.copyHtmlBtn, 0, 3, 1, 1)
         self.reverseTempSpin = QtGui.QSpinBox(self.layoutWidget1)
         self.reverseTempSpin.setProperty("value", 34)
         self.reverseTempSpin.setObjectName(_fromUtf8("reverseTempSpin"))
         self.gridLayout.addWidget(self.reverseTempSpin, 0, 1, 1, 1)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 0, 2, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout)
         self.gridLayout_2.addWidget(self.splitter_2, 0, 0, 1, 1)
 
@@ -109,6 +114,7 @@ class Ui_solutionEditor(object):
         self.solutionTable.topLevelItem(5).setText(0, _translate("solutionEditor", "Reversal Potentials", None))
         self.solutionTable.setSortingEnabled(__sortingEnabled)
         self.label_4.setText(_translate("solutionEditor", "Reversal temperature", None))
+        self.copyHtmlBtn.setText(_translate("solutionEditor", "Copy HTML", None))
         self.reverseTempSpin.setSuffix(_translate("solutionEditor", "C", None))
 
 from .textEditor import RichTextEdit
