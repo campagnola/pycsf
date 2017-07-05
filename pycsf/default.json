@@ -418,22 +418,6 @@
     }, 
     {
       "group": "Energy sources", 
-      "name": "phosphocreatine bg", 
-      "formula": "", 
-      "molweight": 453.4, 
-      "osmconst": 1, 
-      "Na": 0, 
-      "K": 0, 
-      "Cl": 0, 
-      "Ca": 0, 
-      "Mg": 0, 
-      "SO4": 0, 
-      "PO4": 0, 
-      "Cs": 0, 
-      "notes": "<br /><br/>"
-    }, 
-    {
-      "group": "Energy sources", 
       "name": "phosphocreatine disodium salt hydrate", 
       "formula": "phosphocreatine-Na2 ", 
       "molweight": 401.5, 
@@ -483,7 +467,7 @@
     {
       "group": "Energy sources", 
       "name": "ATP magnesium salt", 
-      "formula": "ATP-Mg", 
+      "formula": "ATP-xMg", 
       "molweight": 594.76, 
       "osmconst": 2.38, 
       "Na": 0, 
@@ -558,7 +542,7 @@
       "SO4": 0, 
       "PO4": 0, 
       "Cs": 0, 
-      "notes": "The MW for ATP disodium salt is 567.10 g/mol; however, this does not include the water in the product.<br /><br/>"
+      "notes": "The MW for GTP disodium salt is 567.10 g/mol; however, this does not include the water in the product. Check the certificate of analysis for actual water and sodium content.<br /><br/>"
     }, 
     {
       "group": "Toxins", 
