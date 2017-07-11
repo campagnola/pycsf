@@ -58,6 +58,23 @@ DEFAULT_REAGENTS = [
 
 class Reagents(QtCore.QObject):
     """A table of reagents and their properties.
+
+    Fields are:
+    
+        * group (str): The name of a group to which this reagent belongs.
+        * name (str): The long name of this reagent.
+        * formula (str): The molecular formula or short name for this reagent.
+        * molweight (float): The number of grams of product per mole of reagent.
+          Note that this may be different from the actual molecular weight of the
+          reagent if the product contains impurities.
+        * osmconst (float): Osmotic constant to use for this reagent when estimating osmolarity.
+        * <ion dissociation constants> (float): For each type of ion (K, Na, Cl, ...),
+          the number of free ions contributed by one molecule of this reagent. 
+        * notes (str): Description of this reagent / product.
+    
+    Note: Each reagent is uniquely identified by its name. In a more robust
+    database, we might have used a unique integer ID instead, but in this case
+    we want the database json file to be human readable and editable.
     """
     sigReagentListChanged = QtCore.Signal(object)  # self
     sigReagentDataChanged = QtCore.Signal(object)  # self
