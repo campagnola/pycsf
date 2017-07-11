@@ -88,6 +88,7 @@ class SolutionEditorWidget(QtGui.QWidget):
         self.db.solutions.solutionListChanged.connect(self.updateSolutionList)
         self.db.reagents.sigReagentListChanged.connect(self.updateSolutionTree)
         self.db.reagents.sigReagentDataChanged.connect(self.updateSolutionTree)
+        self.db.reagents.sigReagentRenamed.connect(self.updateSolutionTree)
 
         self.updateSolutionList()
 

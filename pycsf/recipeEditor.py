@@ -49,6 +49,7 @@ class RecipeEditorWidget(QtGui.QWidget):
         self.db.solutions.solutionListChanged.connect(self.solutionsChanged)
         self.db.recipes.sigRecipeSetListChanged.connect(self.updateRecipeSetList)
         self.db.reagents.sigReagentDataChanged.connect(self.updateRecipeTable)
+        self.db.reagents.sigReagentRenamed.connect(self.updateRecipeTable)
         self.ui.recipeTable.cellClicked.connect(self.cellClicked)
         self.ui.recipeTable.cellChanged.connect(self.cellChanged)
         self.ui.showMWCheck.clicked.connect(self.updateRecipeTable)
