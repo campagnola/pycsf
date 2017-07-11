@@ -61,9 +61,11 @@ class Reagents(QtCore.QObject):
     """
     sigReagentListChanged = QtCore.Signal(object)  # self
     sigReagentDataChanged = QtCore.Signal(object)  # self
+    sigReagentRenamed = QtCore.Signal(object, object, object)  # self, oldname, newname
     
-    def __init__(self):
+    def __init__(self, db):
         QtCore.QObject.__init__(self)
+        self.db = db
         self._dtype = [
             ('group', object),
             ('name', object),
@@ -125,6 +127,8 @@ class Reagents(QtCore.QObject):
             raise NameError("A reagent named '%s' already exists." % n2)
         ind = self._getIndex(n1)
         self._data[ind]['name'] = n2
+        self.db.reagentRenamed(n1, n2)
+        self.sigReagentRenamed.emit(self, n1, n2)
         self.sigReagentListChanged.emit(self)
         
     def setData(self, name, item, value):
@@ -193,8 +197,9 @@ class Solutions(QtCore.QObject):
 
     def add(self, soln=None, name=None, group=None):
         if soln is None:
-            soln = Solution(name=name, group=group)
-        soln.db = self.db
+            soln = Solution(name=name, group=group, db=self.db)
+        else:
+            soln.db = self.db
         for s in self._data:
             if s.name == soln.name:
                 raise NameError("Solution with this name already exists.")
@@ -266,6 +271,10 @@ class Solutions(QtCore.QObject):
             results[soln.name] = [ions, osm, revs]
             
         return results
+
+    def reagentRenamed(self, old, new):
+        for sol in self._data:
+            sol.reagentRenamed(old, new)
 
 
 class Solution(QtCore.QObject):
@@ -353,6 +362,14 @@ class Solution(QtCore.QObject):
         osm = np.sum(concs * reagents['osmconst'])
         return ions, osm
 
+    def reagentRenamed(self, old, new):
+        changed = False
+        if old in self._reagents:
+            self._reagents[new] = self._reagents[old]
+            del self._reagents[old]
+            changed = True
+        #if changed:
+            #self.sigSolutionChanged.emit(self)
 
 def _saveArray(data):
     return [_recToDict(rec) for rec in data]
@@ -481,6 +498,15 @@ class RecipeSet(QtCore.QObject):
         rs.name = name
         rs.recipes = [r.copy() for r in self._recipes]
         return rs
+    
+    def reagentRenamed(self, old, new):
+        if old in self.reagentOrder:
+            self.reagentOrder[self.reagentOrder.index(old)] = new
+            changed = True
+        if old in self.stocks:
+            self.stocks[new] = self.stocks[old]
+            del self.stocks[old]
+            changed = True
 
 
 class RecipeBook(QtCore.QObject):
@@ -523,11 +549,15 @@ class RecipeBook(QtCore.QObject):
         for rs in self._recipeSets:
             yield rs
 
+    def reagentRenamed(self, old, new):
+        for rset in self._recipeSets:
+            rset.reagentRenamed(old, new)
+
 
 class SolutionDatabase(QtCore.QObject):
     def __init__(self):
         QtCore.QObject.__init__(self)
-        self.reagents = Reagents()
+        self.reagents = Reagents(db=self)
         self.solutions = Solutions(db=self)
         self.recipes = RecipeBook(db=self)
         
@@ -567,3 +597,6 @@ class SolutionDatabase(QtCore.QObject):
         state = json.load(open(filename, 'rb'))
         self.restore(state)
         
+    def reagentRenamed(self, old, new):
+        self.solutions.reagentRenamed(old, new)
+        self.recipes.reagentRenamed(old, new)
