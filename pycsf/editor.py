@@ -67,12 +67,12 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         
     def loadFile(self, fname=None):
         if fname is None:
-            fname = QtGui.QFileDialog.getOpenFileName()
-        if fname is None:
-            return
+            fname = str(QtGui.QFileDialog.getOpenFileName())
+            if fname == '':
+                return
+        self.db.loadFile(fname)
         self.currentFile = fname
         self.setWindowTitle('Solution Editor: ' + fname)
-        self.db.loadFile(fname)
         self.reagentEditor.updateReagentList()
         self.solutionEditor.updateSolutionList()
         self.solutionEditor.updateSolutionTree()
