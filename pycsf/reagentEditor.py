@@ -1,7 +1,6 @@
 from collections import OrderedDict
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
-from pyqtgraph.python2_3 import asUnicode
 from .treeWidget import GroupItem, ItemDelegate
 from .reagentEditorTemplate import Ui_reagentEditor
 
@@ -44,7 +43,7 @@ class ReagentEditorWidget(QtGui.QWidget):
         if len(items) == 0:
             return
         item = items[0]
-        item.reagent['notes'] = unicode(self.ui.reagentNotes.toHtml())
+        item.reagent['notes'] = str(self.ui.reagentNotes.toHtml())
 
     def addReagent(self, item):
         names = self.db.reagents.names()
@@ -54,7 +53,7 @@ class ReagentEditorWidget(QtGui.QWidget):
             if name not in names:
                 break
             i += 1
-        self.db.reagents.add(name=name, group=asUnicode(item.text(0)))
+        self.db.reagents.add(name=name, group=str(item.text(0)))
 
     def updateReagentList(self):
         tree = self.ui.reagentTree
@@ -114,7 +113,7 @@ class ReagentItem(QtGui.QTreeWidgetItem):
         fields = reagent.fields
         self.fields = OrderedDict([(f,fields[f]) for f in fields if f != 'group'])
         
-        strs = [asUnicode(reagent[f]) for f in self.fields]
+        strs = [str(reagent[f]) for f in self.fields]
         QtGui.QTreeWidgetItem.__init__(self, strs)
         self.setFlags(self.flags() | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable)
 
@@ -132,7 +131,7 @@ class ReagentItem(QtGui.QTreeWidgetItem):
             v = float(str(editor.text()))
             self.setText(col, '%0.2f'%v)
         else:
-            v = asUnicode(editor.text())
+            v = str(editor.text())
             self.setText(col, v)
         self.sigChanged.emit(self, fname, v)
 

@@ -113,7 +113,7 @@ class SolutionEditorWidget(QtGui.QWidget):
         if len(items) == 0:
             return
         item = items[0]
-        item.solution.notes = unicode(self.ui.notesText.toHtml())
+        item.solution.notes = str(self.ui.notesText.toHtml())
         
     def selectionChanged(self):
         selection = self.ui.solutionTable.selectionModel().selection().indexes()

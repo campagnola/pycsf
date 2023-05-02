@@ -3,7 +3,6 @@ import re
 from collections import OrderedDict
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
-from pyqtgraph.python2_3 import asUnicode
 from .core import RecipeSet, Recipe
 from .treeWidget import AdderItem
 from .textEditor import RichTextEdit
@@ -364,7 +363,7 @@ class RecipeEditorWidget(QtGui.QWidget):
                             align = 'center'
                         style = 'font-size: %dpt; text-align: %s' % (fs, align)
                 else:
-                    t = asUnicode(item.text())
+                    t = str(item.text())
                     bg = item.background().color().name()
                     fg = item.foreground().color().name()
                     
@@ -721,10 +720,10 @@ class RecipeNoteItem(pg.TreeWidgetItem):
         if str(self.editor.toPlainText()).strip() == '':
             self.recipe.notes = None
         else:
-            self.recipe.notes = unicode(self.editor.toHtml())
+            self.recipe.notes = str(self.editor.toHtml())
     
     def noteHtml(self):
         if str(self.editor.toPlainText()).strip() == '':
             return ''
-        note = unicode(self.editor.toHtml())
+        note = str(self.editor.toHtml())
         return "<b>%s</b><br>\n%s" % (self.recipe.solution.name, note) 
