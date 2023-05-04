@@ -1,10 +1,10 @@
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 import re
 
 
-class RichTextEdit(QtGui.QTextEdit):
+class RichTextEdit(QtWidgets.QTextEdit):
     def __init__(self, *args):
-        QtGui.QTextEdit.__init__(self, *args)
+        QtWidgets.QTextEdit.__init__(self, *args)
         self.setToolTip('Formatting keys:<br><b>bold: ctrl-b</b><br><i>italic: ctrl-i</i><br><span style="text-decoration: underline">underline: ctrl-u</span>')
         
     def keyPressEvent(self, ev):
@@ -18,10 +18,10 @@ class RichTextEdit(QtGui.QTextEdit):
         elif ev.key() == QtCore.Qt.Key_U and ev.modifiers() == QtCore.Qt.ControlModifier:
             self.setFontUnderline(not self.fontUnderline())
         else:
-            return QtGui.QTextEdit.keyPressEvent(self, ev)
+            return QtWidgets.QTextEdit.keyPressEvent(self, ev)
 
     def toHtml(self):
-        html = str(QtGui.QTextEdit.toHtml(self))
+        html = str(QtWidgets.QTextEdit.toHtml(self))
         
         # Strip off boilerplate html. This should make the JSON easier to
         # read without affecting the text.

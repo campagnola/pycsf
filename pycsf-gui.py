@@ -5,18 +5,18 @@ except ImportError:
     pass
 
 import sys
-from pyqtgraph import QtGui, QtCore
+from pyqtgraph import QtWidgets, QtCore
 from pycsf.editor import SolutionEditorWindow
 from pycsf.core import SolutionDatabase
 
-app = QtGui.QApplication([])
+app = QtWidgets.QApplication([])
 
 #import pyqtgraph as pg
 #pg.dbg()
 sysExcepthook = sys.excepthook
 def handleException(*args):
     sysExcepthook(*args)
-    QtGui.QMessageBox.warning(None, "Oops.", str(args[1]))
+    QtWidgets.QMessageBox.warning(None, "Oops.", str(args[1]))
 sys.excepthook = handleException    
 
 
@@ -30,4 +30,4 @@ else:
 w.show()
 w.tabs.setCurrentIndex(2)
 
-QtGui.QApplication.instance().exec_()
+QtWidgets.QApplication.instance().exec_()

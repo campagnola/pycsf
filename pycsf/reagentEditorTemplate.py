@@ -2,11 +2,11 @@
 
 # Form implementation generated from reading ui file 'reagentEditorTemplate.ui'
 #
-# Created by: PyQt4 UI code generator 4.11.4
+# Created by: PyQt5 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtWidgets
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -15,32 +15,32 @@ except AttributeError:
         return s
 
 try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
+    _encoding = QtWidgets.QApplication.UnicodeUTF8
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+        return QtWidgets.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+        return QtWidgets.QApplication.translate(context, text, disambig)
 
 class Ui_reagentEditor(object):
     def setupUi(self, reagentEditor):
         reagentEditor.setObjectName(_fromUtf8("reagentEditor"))
         reagentEditor.resize(612, 466)
-        self.gridLayout = QtGui.QGridLayout(reagentEditor)
+        self.gridLayout = QtWidgets.QGridLayout(reagentEditor)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.splitter = QtGui.QSplitter(reagentEditor)
+        self.splitter = QtWidgets.QSplitter(reagentEditor)
         self.splitter.setOrientation(QtCore.Qt.Vertical)
         self.splitter.setObjectName(_fromUtf8("splitter"))
         self.reagentTree = TreeWidget(self.splitter)
         self.reagentTree.setAlternatingRowColors(True)
-        self.reagentTree.setVerticalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.reagentTree.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.reagentTree.setObjectName(_fromUtf8("reagentTree"))
-        item_0 = QtGui.QTreeWidgetItem(self.reagentTree)
-        item_0 = QtGui.QTreeWidgetItem(self.reagentTree)
-        item_0 = QtGui.QTreeWidgetItem(self.reagentTree)
-        item_0 = QtGui.QTreeWidgetItem(self.reagentTree)
-        item_0 = QtGui.QTreeWidgetItem(self.reagentTree)
-        item_0 = QtGui.QTreeWidgetItem(self.reagentTree)
+        item_0 = QtWidgets.QTreeWidgetItem(self.reagentTree)
+        item_0 = QtWidgets.QTreeWidgetItem(self.reagentTree)
+        item_0 = QtWidgets.QTreeWidgetItem(self.reagentTree)
+        item_0 = QtWidgets.QTreeWidgetItem(self.reagentTree)
+        item_0 = QtWidgets.QTreeWidgetItem(self.reagentTree)
+        item_0 = QtWidgets.QTreeWidgetItem(self.reagentTree)
         self.reagentNotes = RichTextEdit(self.splitter)
         self.reagentNotes.setObjectName(_fromUtf8("reagentNotes"))
         self.gridLayout.addWidget(self.splitter, 0, 0, 1, 1)

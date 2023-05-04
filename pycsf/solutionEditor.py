@@ -1,23 +1,24 @@
 import os
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
 from .core import IONS
 from .treeWidget import ItemDelegate, GroupItem, HtmlItem
-from .solutionEditorTemplate import Ui_solutionEditor
 from .format_float import formatFloat
+from .qt import importTemplate
+Ui_solutionEditor = importTemplate('.solutionEditorTemplate')
 
 
-class SolutionEditorWidget(QtGui.QWidget):
+class SolutionEditorWidget(QtWidgets.QWidget):
     def __init__(self, db, parent=None):
         self.db = db
         self.selectedSolutions = []
         self.showAllReagents = False
         
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.ui = Ui_solutionEditor()
         self.ui.setupUi(self)
         
-        self.ui.solutionList.setEditTriggers(QtGui.QAbstractItemView.EditKeyPressed | QtGui.QAbstractItemView.SelectedClicked)
+        self.ui.solutionList.setEditTriggers(QtWidgets.QAbstractItemView.EditKeyPressed | QtWidgets.QAbstractItemView.SelectedClicked)
         self.ui.solutionList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.solutionList.customContextMenuRequested.connect(self.solutionMenuRequested)
 
@@ -25,7 +26,7 @@ class SolutionEditorWidget(QtGui.QWidget):
         self.ui.solutionList.addTopLevelItem(self.addGroupItem)
         self.addGroupItem.label.linkActivated.connect(lambda: self.addGroup('New Group'))
         
-        self.ui.solutionTable.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
+        self.ui.solutionTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
         self.solnTableDelegate = ItemDelegate(self.ui.solutionTable)  # allow items to specify their own editors
         self.ui.solutionTable.setHeaderLabels([''])
         #self.ui.solutionTable.setUniformRowHeights(True)
@@ -58,13 +59,13 @@ class SolutionEditorWidget(QtGui.QWidget):
         self.measIonConcItems = {}
         self.ionReversalItems = {}
         for ion in IONS:
-            item = QtGui.QTreeWidgetItem([ion])
+            item = QtWidgets.QTreeWidgetItem([ion])
             self.solnTreeItems['Ion Concentrations (estimated)'].addChild(item)
             self.estIonConcItems[ion] = item
-            item = QtGui.QTreeWidgetItem([ion])
+            item = QtWidgets.QTreeWidgetItem([ion])
             self.solnTreeItems['Ion Concentrations (measured)'].addChild(item)
             self.measIonConcItems[ion] = item
-            item = QtGui.QTreeWidgetItem([ion])
+            item = QtWidgets.QTreeWidgetItem([ion])
             self.solnTreeItems['Reversal Potentials'].addChild(item)
             self.ionReversalItems[ion] = item
 
@@ -268,7 +269,7 @@ class SolutionEditorWidget(QtGui.QWidget):
         grpItems = {}
         for reagent in reagents:
             #concs = ['%0.1f'%soln.reagents[reagent] if reagent in soln.reagents else '' for soln in self.selectedSolutions]
-            #item = QtGui.QTreeWidgetItem([reagent] + concs)
+            #item = QtWidgets.QTreeWidgetItem([reagent] + concs)
             item = ReagentItem(reagent, self.selectedSolutions)
             item.sigChanged.connect(self.recalculate)
             self.reagentItems[reagent] = item
@@ -283,7 +284,7 @@ class SolutionEditorWidget(QtGui.QWidget):
                 if grp in grpItems:
                     grpItems[grp].addChild(item)
                 else:
-                    grpItem = QtGui.QTreeWidgetItem([grp])
+                    grpItem = QtWidgets.QTreeWidgetItem([grp])
                     reagentTree.addChild(grpItem)
                     grpItems[grp] = grpItem
                     grpItem.addChild(item)
@@ -331,11 +332,11 @@ class SolutionEditorWidget(QtGui.QWidget):
 
         # copy to clipboard
         if os.sys.platform in ['darwin']:
-            QtGui.QApplication.clipboard().setText(txt)
+            QtWidgets.QApplication.clipboard().setText(txt)
         else:
             md = QtCore.QMimeData()
             md.setHtml(txt)
-            QtGui.QApplication.clipboard().setMimeData(md)
+            QtWidgets.QApplication.clipboard().setMimeData(md)
         
     def _itemToHtml(self, tree, item):
         txt = "  <tr>\n"
@@ -372,7 +373,7 @@ class ReagentItem(pg.TreeWidgetItem):
     def createEditor(self, parent, option, col):
         if col == 0:
             return None
-        return QtGui.QLineEdit(parent)
+        return QtWidgets.QLineEdit(parent)
     
     def setEditorData(self, editor, col):
         editor.setText(self.text(col))
@@ -399,7 +400,7 @@ class SolutionItem(pg.TreeWidgetItem):
 
         self.solution = soln
         pg.TreeWidgetItem.__init__(self, [soln.name])
-        self.menu = QtGui.QMenu()
+        self.menu = QtWidgets.QMenu()
         self.menu.addAction('Copy', self.copyClicked)
         self.menu.addAction('Remove', self.removeClicked)
         
@@ -451,8 +452,8 @@ class ReverseAgainstItem(pg.TreeWidgetItem):
 
         self.solutions = []
         pg.TreeWidgetItem.__init__(self, ['Reverse against'])
-        self.internalMenu = QtGui.QMenu()
-        self.externalMenu = QtGui.QMenu()
+        self.internalMenu = QtWidgets.QMenu()
+        self.externalMenu = QtWidgets.QMenu()
         
     def setSolutions(self, solutions):
         self.solutions = solutions
@@ -472,11 +473,11 @@ class ReverseAgainstItem(pg.TreeWidgetItem):
                     continue
                 if sol.group != grp:
                     grp = sol.group
-                    label = QtGui.QLabel(grp)
+                    label = QtWidgets.QLabel(grp)
                     font = label.font()
                     font.setWeight(font.Bold)
                     label.setFont(font)
-                    act = QtGui.QWidgetAction(menu)
+                    act = QtWidgets.QWidgetAction(menu)
                     act.setDefaultWidget(label)
                     menu.addAction(act)
                 menu.addAction("  " + sol.name, self.selectionChanged)

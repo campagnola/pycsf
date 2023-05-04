@@ -4,11 +4,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 import faulthandler
 faulthandler.enable()
 
-from pyqtgraph import QtGui, QtCore
+from pyqtgraph import QtWidgets, QtCore
 from pycsf.editor import SolutionEditorWindow
 from pycsf.core import Solution, Recipe, RecipeSet, SolutionDatabase
 
-app = QtGui.QApplication([])
+app = QtWidgets.QApplication([])
 #import pyqtgraph as pg
 #pg.dbg()
 
@@ -64,4 +64,4 @@ w.show()
 #w.solutionEditor.updateSolutionList()
 w.tabs.setCurrentIndex(0)
 
-QtGui.QApplication.instance().exec_()
+QtWidgets.QApplication.instance().exec_()

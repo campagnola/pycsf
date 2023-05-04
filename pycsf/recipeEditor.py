@@ -2,7 +2,7 @@ import os
 import re
 from collections import OrderedDict
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
 from .core import RecipeSet, Recipe
 from .treeWidget import AdderItem
 from .textEditor import RichTextEdit
@@ -16,7 +16,7 @@ TODO:
 
 
 
-class RecipeEditorWidget(QtGui.QWidget):
+class RecipeEditorWidget(QtWidgets.QWidget):
     def __init__(self, db, parent=None):
         self.db = db
         self.recipeSet = None
@@ -25,7 +25,7 @@ class RecipeEditorWidget(QtGui.QWidget):
         
         self.addSolutionItem = None
         
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.ui = Ui_recipeEditor()
         self.ui.setupUi(self)
         self.ui.hsplitter.setStretchFactor(0, 1)
@@ -177,7 +177,7 @@ class RecipeEditorWidget(QtGui.QWidget):
         table.setItem(0, col, self.addSolutionItem)
 
         # Add a row for units
-        label = QtGui.QLabel('masses in mg, <span style="color: #0000c8">stock volumes in ml</span>')
+        label = QtWidgets.QLabel('masses in mg, <span style="color: #0000c8">stock volumes in ml</span>')
         label.setAlignment(QtCore.Qt.AlignRight)
         f = label.font()
         f.setPointSize(8)
@@ -194,13 +194,13 @@ class RecipeEditorWidget(QtGui.QWidget):
                 if item is None:
                     item = TableWidgetItem()
                     table.setItem(row, col, item)
-                item.setBackgroundColor(QtGui.QColor(*bg))
+                item.setBackground(QtGui.QColor(*bg))
                 item.borders['bottom'] = QtGui.QPen(QtGui.QColor(50, 50, 50))
 
         for row in range(2, table.rowCount()):
             item = table.item(row, 0)
             if item is not None:
-                item.setBackgroundColor(QtGui.QColor(240, 240, 240))
+                item.setBackground(QtGui.QColor(240, 240, 240))
 
         table.cellChanged.connect(self.cellChanged)
         self.solutionsChanged()
@@ -243,7 +243,7 @@ class RecipeEditorWidget(QtGui.QWidget):
         # select new item
         rsl = self.ui.recipeSetList
         item = rsl.topLevelItem(rsl.topLevelItemCount()-2)
-        rsl.setCurrentItem(item, 0, QtGui.QItemSelectionModel.SelectCurrent)
+        rsl.setCurrentItem(item, 0, QtWidgets.QItemSelectionModel.SelectCurrent)
             
     def recipeSetItemChanged(self, item, col):
         item.recipeSet.name = str(item.text(0))
@@ -390,28 +390,28 @@ class RecipeEditorWidget(QtGui.QWidget):
         
         # copy to clipboard
         if os.sys.platform in ['darwin']:
-            QtGui.QApplication.clipboard().setText(txt)
+            QtWidgets.QApplication.clipboard().setText(txt)
         else:
             md = QtCore.QMimeData()
             md.setHtml(txt)
-            QtGui.QApplication.clipboard().setMimeData(md)
+            QtWidgets.QApplication.clipboard().setMimeData(md)
 
 
-class StyleDelegate(QtGui.QStyledItemDelegate):
+class StyleDelegate(QtWidgets.QStyledItemDelegate):
     def __init__(self, table):
-        QtGui.QStyledItemDelegate.__init__(self)
+        QtWidgets.QStyledItemDelegate.__init__(self)
         self.table = table
     
     def paint(self, painter, option, index):
-        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
+        QtWidgets.QStyledItemDelegate.paint(self, painter, option, index)
         item = self.table.item(index.row(), index.column())
         if hasattr(item, 'paint'):
             item.paint(painter, option)
             
 
-class TableWidgetItem(QtGui.QTableWidgetItem):
+class TableWidgetItem(QtWidgets.QTableWidgetItem):
     def __init__(self, *args):
-        QtGui.QTableWidgetItem.__init__(self, *args)
+        QtWidgets.QTableWidgetItem.__init__(self, *args)
         # need this because cells report their background incorrectly
         # if it hasn't been set
         self.setBackground(QtGui.QColor(255, 255, 255))
@@ -549,7 +549,7 @@ class SolutionItem(TableWidgetItem):
 
         self.removable = removable
         TableWidgetItem.__init__(self, soln)
-        self.menu = QtGui.QMenu()
+        self.menu = QtWidgets.QMenu()
         self.setTextAlignment(QtCore.Qt.AlignCenter)
         #self.borders['bottom'] = QtGui.QPen(QtGui.QColor(50, 50, 50))
         self.borders['left'] = QtGui.QPen(QtGui.QColor(0, 0, 0))
@@ -570,11 +570,11 @@ class SolutionItem(TableWidgetItem):
             
         # create group / solution entries
         for grp, solns in grps.items():
-            label = QtGui.QLabel(grp)
+            label = QtWidgets.QLabel(grp)
             font = label.font()
             font.setWeight(font.Bold)
             label.setFont(font)
-            act = QtGui.QWidgetAction(self.menu)
+            act = QtWidgets.QWidgetAction(self.menu)
             act.setDefaultWidget(label)
             self.menu.addAction(act)
             for soln in solns:
@@ -620,16 +620,16 @@ class EditableItem(TableWidgetItem):
         self.sigChanged.emit(self)
 
 
-class LabeledLineEdit(QtGui.QWidget):
+class LabeledLineEdit(QtWidgets.QWidget):
     def __init__(self, label, parent):
-        QtGui.QWidget.__init__(self, parent)
-        self.layout = QtGui.QGridLayout()
+        QtWidgets.QWidget.__init__(self, parent)
+        self.layout = QtWidgets.QGridLayout()
         self.setLayout(self.layout)
         self.layout.setSpacing(2)
         self.layout.setContentsMargins(3, 3, 3, 3)
-        self.label = QtGui.QLabel(label)
+        self.label = QtWidgets.QLabel(label)
         self.layout.addWidget(self.label, 0, 0)
-        self.text = QtGui.QLineEdit()
+        self.text = QtWidgets.QLineEdit()
         self.layout.addWidget(self.text, 1, 0)
         
         self.editingFinished = self.text.editingFinished
@@ -645,8 +645,8 @@ class ReagentItem(TableWidgetItem):
         TableWidgetItem.__init__(self, '')
         self.reagent = reagent
         
-        self.menu = QtGui.QMenu()
-        self.action = QtGui.QWidgetAction(self.menu)
+        self.menu = QtWidgets.QMenu()
+        self.action = QtWidgets.QWidgetAction(self.menu)
         self.concEdit = LabeledLineEdit('Stock concentration:', self.menu)
         self.concEdit.text.setPlaceholderText('[ none ]')
         if stock is not None:
@@ -678,7 +678,7 @@ class ReagentItem(TableWidgetItem):
         self.menu.hide()
 
 
-class RecipeSetItem(QtGui.QTreeWidgetItem):
+class RecipeSetItem(QtWidgets.QTreeWidgetItem):
     def __init__(self, rset):
         class SigProxy(QtCore.QObject):
             sigCopyClicked = QtCore.Signal(object)
@@ -688,8 +688,8 @@ class RecipeSetItem(QtGui.QTreeWidgetItem):
         self.sigRemoveClicked = self.__sigprox.sigRemoveClicked
 
         self.recipeSet = rset
-        QtGui.QTreeWidgetItem.__init__(self, [rset.name])
-        self.menu = QtGui.QMenu()
+        QtWidgets.QTreeWidgetItem.__init__(self, [rset.name])
+        self.menu = QtWidgets.QMenu()
         self.menu.addAction('Copy', self.copyClicked)
         self.menu.addAction('Remove', self.removeClicked)
         

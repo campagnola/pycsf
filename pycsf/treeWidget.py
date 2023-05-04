@@ -1,12 +1,12 @@
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
 
 
-class ItemDelegate(QtGui.QItemDelegate):
+class ItemDelegate(QtWidgets.QItemDelegate):
     """Delegate that allows tree items to create their own per-column editors.
     """
     def __init__(self, tree):
-        QtGui.QItemDelegate.__init__(self, tree)
+        QtWidgets.QItemDelegate.__init__(self, tree)
         self.tree = tree
         tree.setItemDelegate(self)
         
@@ -26,14 +26,14 @@ class ItemDelegate(QtGui.QItemDelegate):
         return item.setModelData(editor, model, col)
 
 
-class LabeledWidget(QtGui.QWidget):
+class LabeledWidget(QtWidgets.QWidget):
     def __init__(self, text, widget):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.widget = widget
-        self.layout = QtGui.QHBoxLayout()
+        self.layout = QtWidgets.QHBoxLayout()
         self.setLayout(self.layout)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.label = QtGui.QLabel(text)
+        self.label = QtWidgets.QLabel(text)
         self.label.setFixedWidth(100)
         self.layout.addWidget(self.label)
         self.layout.addWidget(widget)
@@ -42,7 +42,7 @@ class LabeledWidget(QtGui.QWidget):
 class HtmlItem(pg.TreeWidgetItem):
     def __init__(self, text):
         pg.TreeWidgetItem.__init__(self)
-        self.label = QtGui.QLabel(text)
+        self.label = QtWidgets.QLabel(text)
         self.label.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
         self.setWidget(0, self.label)
 
@@ -107,13 +107,13 @@ class AdderItem(pg.TreeWidgetItem):
         
         pg.TreeWidgetItem.__init__(self)
         self.setFlags(self.flags() | QtCore.Qt.ItemIsEditable)
-        self.label = QtGui.QLabel()
+        self.label = QtWidgets.QLabel()
         self.setText(text)
         self.label.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
         self.label.linkActivated.connect(self.labelClicked)
         self.setWidget(0, self.label)
         
-        self.addListPopup = QtGui.QMenu(self.label)
+        self.addListPopup = QtWidgets.QMenu(self.label)
         self.addListPopup.triggered.connect(self.addSelected)
         
         self.setAddList(addList)
@@ -133,11 +133,11 @@ class AdderItem(pg.TreeWidgetItem):
             for item in self.addList:
                 if item.startswith('__'):
                     # secret code for adding non-interactive labels
-                    l = QtGui.QLabel(item[2:])
+                    l = QtWidgets.QLabel(item[2:])
                     f = l.font()
                     f.setWeight(f.Bold)
                     l.setFont(f)
-                    a = QtGui.QWidgetAction(w)
+                    a = QtWidgets.QWidgetAction(w)
                     a.setDefaultWidget(l)
                     w.addAction(a)
                 else:

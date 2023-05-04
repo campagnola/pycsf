@@ -1,22 +1,22 @@
 from collections import OrderedDict
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 from .treeWidget import GroupItem, ItemDelegate
 from .reagentEditorTemplate import Ui_reagentEditor
 
 
-class ReagentEditorWidget(QtGui.QWidget):
+class ReagentEditorWidget(QtWidgets.QWidget):
     def __init__(self, db, parent=None):
         self.db = db
         self.reagents = db.reagents
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.ui = Ui_reagentEditor()
         self.ui.setupUi(self)
         self.ui.splitter.setStretchFactor(0, 4)
         self.ui.splitter.setStretchFactor(1, 1)
 
         tree = self.ui.reagentTree
-        tree.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
+        tree.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
         self.itemDelegate = ItemDelegate(tree)  # allow items to specify their own editors
         tree.itemSelectionChanged.connect(self.selectionChanged)
         self.ui.reagentNotes.textChanged.connect(self.notesChanged)
@@ -102,7 +102,7 @@ class ReagentEditorWidget(QtGui.QWidget):
             
 
 
-class ReagentItem(QtGui.QTreeWidgetItem):
+class ReagentItem(QtWidgets.QTreeWidgetItem):
     def __init__(self, reagent):
         class SigProxy(QtCore.QObject):
             sigChanged = QtCore.Signal(object, object, object)  # self, field, value
@@ -114,11 +114,11 @@ class ReagentItem(QtGui.QTreeWidgetItem):
         self.fields = OrderedDict([(f,fields[f]) for f in fields if f != 'group'])
         
         strs = [str(reagent[f]) for f in self.fields]
-        QtGui.QTreeWidgetItem.__init__(self, strs)
+        QtWidgets.QTreeWidgetItem.__init__(self, strs)
         self.setFlags(self.flags() | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable)
 
     def createEditor(self, parent, option, col):
-        return QtGui.QLineEdit(parent)
+        return QtWidgets.QLineEdit(parent)
     
     def setEditorData(self, editor, col):
         editor.setText(self.text(col))

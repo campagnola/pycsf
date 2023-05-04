@@ -1,5 +1,5 @@
 import os, json
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtGui
 from .core import SolutionDatabase
 from .reagentEditor import ReagentEditorWidget
 from .solutionEditor import SolutionEditorWidget
@@ -7,7 +7,7 @@ from .recipeEditor import RecipeEditorWidget
 from .constraintEditor import ConstraintEditorWidget
 
 
-class SolutionEditorWindow(QtGui.QMainWindow):
+class SolutionEditorWindow(QtWidgets.QMainWindow):
     def __init__(self, db=None):
         if db is None:
             db = SolutionDatabase()
@@ -15,14 +15,14 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         
         self.currentFile = None
         
-        QtGui.QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
         
         icon = os.path.join(os.path.dirname(__file__), 'flask.png')
         if os.path.isfile(icon):
             self.setWindowIcon(QtGui.QIcon(icon))
         
         self.resize(1200, 800)
-        self.tabs = QtGui.QTabWidget()
+        self.tabs = QtWidgets.QTabWidget()
         self.setCentralWidget(self.tabs)
         
         self.reagentEditor = ReagentEditorWidget(self.db)
@@ -49,7 +49,7 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         
     def save(self):
         # clear focus to trigger any pending editor updates
-        fw = QtGui.QApplication.focusWidget()
+        fw = QtWidgets.QApplication.focusWidget()
         if fw is not None:
             fw.clearFocus()
         
@@ -59,7 +59,7 @@ class SolutionEditorWindow(QtGui.QMainWindow):
             self.db.saveFile(self.currentFile)
         
     def saveAs(self):
-        fname = QtGui.QFileDialog.getSaveFileName()
+        fname = QtWidgets.QFileDialog.getSaveFileName()
         if fname is not None:
             self.currentFile = fname
             self.setWindowTitle('Solution Editor: ' + fname)
@@ -67,7 +67,7 @@ class SolutionEditorWindow(QtGui.QMainWindow):
         
     def loadFile(self, fname=None):
         if fname is None:
-            fname = str(QtGui.QFileDialog.getOpenFileName())
+            fname = str(QtWidgets.QFileDialog.getOpenFileName()[0])
             if fname == '':
                 return
         self.db.loadFile(fname)
