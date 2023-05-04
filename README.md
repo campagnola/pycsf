@@ -29,6 +29,7 @@ Features
 Requirements
 ------------ 
 
-* Python 2.7
+* Python 3
 * numpy
-* pyqtgraph from http://github.com/campagnola/pyqtgraph/tree/pycsf
+* PyQt5
+* pyqtgraph
