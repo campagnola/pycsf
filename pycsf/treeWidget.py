@@ -1,12 +1,12 @@
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
+from . import qt
 
 
-class ItemDelegate(QtWidgets.QItemDelegate):
+class ItemDelegate(qt.QItemDelegate):
     """Delegate that allows tree items to create their own per-column editors.
     """
     def __init__(self, tree):
-        QtWidgets.QItemDelegate.__init__(self, tree)
+        qt.QItemDelegate.__init__(self, tree)
         self.tree = tree
         tree.setItemDelegate(self)
         
@@ -26,14 +26,14 @@ class ItemDelegate(QtWidgets.QItemDelegate):
         return item.setModelData(editor, model, col)
 
 
-class LabeledWidget(QtWidgets.QWidget):
+class LabeledWidget(qt.QWidget):
     def __init__(self, text, widget):
-        QtWidgets.QWidget.__init__(self)
+        qt.QWidget.__init__(self)
         self.widget = widget
-        self.layout = QtWidgets.QHBoxLayout()
+        self.layout = qt.QHBoxLayout()
         self.setLayout(self.layout)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.label = QtWidgets.QLabel(text)
+        self.label = qt.QLabel(text)
         self.label.setFixedWidth(100)
         self.layout.addWidget(self.label)
         self.layout.addWidget(widget)
@@ -42,30 +42,30 @@ class LabeledWidget(QtWidgets.QWidget):
 class HtmlItem(pg.TreeWidgetItem):
     def __init__(self, text):
         pg.TreeWidgetItem.__init__(self)
-        self.label = QtWidgets.QLabel(text)
-        self.label.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
+        self.label = qt.QLabel(text)
+        self.label.setTextInteractionFlags(qt.Qt.TextBrowserInteraction)
         self.setWidget(0, self.label)
 
 
 class GroupItem(pg.TreeWidgetItem):
     def __init__(self, name, adder=None, editable=False, checkable=False, addList=None):
-        class SigProxy(QtCore.QObject):
-            sigAddClicked = QtCore.Signal(object, object)
+        class SigProxy(qt.QObject):
+            sigAddClicked = qt.Signal(object, object)
         self._sigprox = SigProxy()
         self.sigAddClicked = self._sigprox.sigAddClicked
             
         pg.TreeWidgetItem.__init__(self, [name])
-        font = QtGui.QFont()
-        font.setWeight(QtGui.QFont.Bold)
+        font = qt.QFont()
+        font.setWeight(qt.QFont.Bold)
         self.setFont(0, font)
         self.setForeground(0, pg.mkBrush(255, 255, 255))
         self.setBackground(0, pg.mkBrush(180, 180, 200))
         #self.setFirstColumnSpanned(True)
         self.setExpanded(True)
         if editable:
-            self.setFlags(self.flags() | QtCore.Qt.ItemIsEditable)
+            self.setFlags(self.flags() | qt.Qt.ItemIsEditable)
         if checkable:
-            self.setFlags(self.flags() | QtCore.Qt.ItemIsUserCheckable)
+            self.setFlags(self.flags() | qt.Qt.ItemIsUserCheckable)
             self.setChecked(0, False)
         
         if adder is None:
@@ -100,20 +100,20 @@ class GroupItem(pg.TreeWidgetItem):
 
 class AdderItem(pg.TreeWidgetItem):
     def __init__(self, text, addList=None):
-        class SigProxy(QtCore.QObject):
-            clicked = QtCore.Signal(object, object)  # self, value
+        class SigProxy(qt.QObject):
+            clicked = qt.Signal(object, object)  # self, value
         self._sigproxy = SigProxy()
         self.clicked = self._sigproxy.clicked
         
         pg.TreeWidgetItem.__init__(self)
-        self.setFlags(self.flags() | QtCore.Qt.ItemIsEditable)
-        self.label = QtWidgets.QLabel()
+        self.setFlags(self.flags() | qt.Qt.ItemIsEditable)
+        self.label = qt.QLabel()
         self.setText(text)
-        self.label.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
+        self.label.setTextInteractionFlags(qt.Qt.TextBrowserInteraction)
         self.label.linkActivated.connect(self.labelClicked)
         self.setWidget(0, self.label)
         
-        self.addListPopup = QtWidgets.QMenu(self.label)
+        self.addListPopup = qt.QMenu(self.label)
         self.addListPopup.triggered.connect(self.addSelected)
         
         self.setAddList(addList)
@@ -133,11 +133,11 @@ class AdderItem(pg.TreeWidgetItem):
             for item in self.addList:
                 if item.startswith('__'):
                     # secret code for adding non-interactive labels
-                    l = QtWidgets.QLabel(item[2:])
+                    l = qt.QLabel(item[2:])
                     f = l.font()
                     f.setWeight(f.Bold)
                     l.setFont(f)
-                    a = QtWidgets.QWidgetAction(w)
+                    a = qt.QWidgetAction(w)
                     a.setDefaultWidget(l)
                     w.addAction(a)
                 else:
@@ -148,7 +148,7 @@ class AdderItem(pg.TreeWidgetItem):
             self.clicked.emit(self, None)
         else:
             w = self.addListPopup
-            pt = self.label.mapToGlobal(QtCore.QPoint(15, self.label.height()))
+            pt = self.label.mapToGlobal(qt.QPoint(15, self.label.height()))
             w.popup(pt)
         
     def addSelected(self, action):

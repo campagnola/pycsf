@@ -1,32 +1,32 @@
 import os
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
+from . import qt
 from .core import IONS
 from .treeWidget import ItemDelegate, GroupItem, HtmlItem
 from .format_float import formatFloat
-from .qt import importTemplate
-Ui_solutionEditor = importTemplate('.solutionEditorTemplate')
+
+Ui_solutionEditor = qt.importTemplate('.solutionEditorTemplate')
 
 
-class SolutionEditorWidget(QtWidgets.QWidget):
+class SolutionEditorWidget(qt.QWidget):
     def __init__(self, db, parent=None):
         self.db = db
         self.selectedSolutions = []
         self.showAllReagents = False
         
-        QtWidgets.QWidget.__init__(self, parent)
+        qt.QWidget.__init__(self, parent)
         self.ui = Ui_solutionEditor()
         self.ui.setupUi(self)
         
-        self.ui.solutionList.setEditTriggers(QtWidgets.QAbstractItemView.EditKeyPressed | QtWidgets.QAbstractItemView.SelectedClicked)
-        self.ui.solutionList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.ui.solutionList.setEditTriggers(qt.QAbstractItemView.EditKeyPressed | qt.QAbstractItemView.SelectedClicked)
+        self.ui.solutionList.setContextMenuPolicy(qt.Qt.CustomContextMenu)
         self.ui.solutionList.customContextMenuRequested.connect(self.solutionMenuRequested)
 
         self.addGroupItem = HtmlItem('+ <a href="/">add group</a>')
         self.ui.solutionList.addTopLevelItem(self.addGroupItem)
         self.addGroupItem.label.linkActivated.connect(lambda: self.addGroup('New Group'))
         
-        self.ui.solutionTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
+        self.ui.solutionTable.setSelectionBehavior(qt.QAbstractItemView.SelectItems)
         self.solnTableDelegate = ItemDelegate(self.ui.solutionTable)  # allow items to specify their own editors
         self.ui.solutionTable.setHeaderLabels([''])
         #self.ui.solutionTable.setUniformRowHeights(True)
@@ -59,13 +59,13 @@ class SolutionEditorWidget(QtWidgets.QWidget):
         self.measIonConcItems = {}
         self.ionReversalItems = {}
         for ion in IONS:
-            item = QtWidgets.QTreeWidgetItem([ion])
+            item = qt.QTreeWidgetItem([ion])
             self.solnTreeItems['Ion Concentrations (estimated)'].addChild(item)
             self.estIonConcItems[ion] = item
-            item = QtWidgets.QTreeWidgetItem([ion])
+            item = qt.QTreeWidgetItem([ion])
             self.solnTreeItems['Ion Concentrations (measured)'].addChild(item)
             self.measIonConcItems[ion] = item
-            item = QtWidgets.QTreeWidgetItem([ion])
+            item = qt.QTreeWidgetItem([ion])
             self.solnTreeItems['Reversal Potentials'].addChild(item)
             self.ionReversalItems[ion] = item
 
@@ -121,7 +121,7 @@ class SolutionEditorWidget(QtWidgets.QWidget):
         if len(selection) != 1:
             return
         item, col = self.ui.solutionTable.itemFromIndex(selection[0])
-        if item.flags() & QtCore.Qt.ItemIsEditable == QtCore.Qt.ItemIsEditable:
+        if item.flags() & qt.Qt.ItemIsEditable == qt.Qt.ItemIsEditable:
             self.ui.solutionTable.editItem(item, col)
 
     def itemClicked(self, item, col):
@@ -139,12 +139,12 @@ class SolutionEditorWidget(QtWidgets.QWidget):
         grpItems = {}
         for soln in self.db.solutions:
             item = SolutionItem(soln)
-            item.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsUserCheckable)
+            item.setFlags(qt.Qt.ItemIsSelectable | qt.Qt.ItemIsEnabled | qt.Qt.ItemIsDragEnabled | qt.Qt.ItemIsEditable | qt.Qt.ItemIsUserCheckable)
             if soln in self.selectedSolutions:
-                item.setCheckState(0, QtCore.Qt.Checked)
+                item.setCheckState(0, qt.Qt.Checked)
                 newSel.append(soln)
             else:
-                item.setCheckState(0, QtCore.Qt.Unchecked)
+                item.setCheckState(0, qt.Qt.Unchecked)
             item.solution = soln
             group = soln.group
             if group not in grpItems:
@@ -269,12 +269,12 @@ class SolutionEditorWidget(QtWidgets.QWidget):
         grpItems = {}
         for reagent in reagents:
             #concs = ['%0.1f'%soln.reagents[reagent] if reagent in soln.reagents else '' for soln in self.selectedSolutions]
-            #item = QtWidgets.QTreeWidgetItem([reagent] + concs)
+            #item = qt.QTreeWidgetItem([reagent] + concs)
             item = ReagentItem(reagent, self.selectedSolutions)
             item.sigChanged.connect(self.recalculate)
             self.reagentItems[reagent] = item
             if reagent in unknown:
-                item.setForeground(0, QtGui.QColor(200, 0, 0))
+                item.setForeground(0, qt.QColor(200, 0, 0))
                 
             if showGroups:
                 if reagent in unknown:
@@ -284,7 +284,7 @@ class SolutionEditorWidget(QtWidgets.QWidget):
                 if grp in grpItems:
                     grpItems[grp].addChild(item)
                 else:
-                    grpItem = QtWidgets.QTreeWidgetItem([grp])
+                    grpItem = qt.QTreeWidgetItem([grp])
                     reagentTree.addChild(grpItem)
                     grpItems[grp] = grpItem
                     grpItem.addChild(item)
@@ -332,11 +332,11 @@ class SolutionEditorWidget(QtWidgets.QWidget):
 
         # copy to clipboard
         if os.sys.platform in ['darwin']:
-            QtWidgets.QApplication.clipboard().setText(txt)
+            qt.QApplication.clipboard().setText(txt)
         else:
-            md = QtCore.QMimeData()
+            md = qt.QMimeData()
             md.setHtml(txt)
-            QtWidgets.QApplication.clipboard().setMimeData(md)
+            qt.QApplication.clipboard().setMimeData(md)
         
     def _itemToHtml(self, tree, item):
         txt = "  <tr>\n"
@@ -360,20 +360,20 @@ class SolutionEditorWidget(QtWidgets.QWidget):
 
 class ReagentItem(pg.TreeWidgetItem):
     def __init__(self, name, solutions):
-        class SigProxy(QtCore.QObject):
-            sigChanged = QtCore.Signal(object)
+        class SigProxy(qt.QObject):
+            sigChanged = qt.Signal(object)
         self._sigprox = SigProxy()
         self.sigChanged = self._sigprox.sigChanged
 
         self.name = name
         self.solutions = solutions
         pg.TreeWidgetItem.__init__(self, [name] + [formatFloat(sol[name]) if name in sol.reagentList() else '' for sol in solutions])
-        self.setFlags(self.flags() | QtCore.Qt.ItemIsEditable)
+        self.setFlags(self.flags() | qt.Qt.ItemIsEditable)
 
     def createEditor(self, parent, option, col):
         if col == 0:
             return None
-        return QtWidgets.QLineEdit(parent)
+        return qt.QLineEdit(parent)
     
     def setEditorData(self, editor, col):
         editor.setText(self.text(col))
@@ -391,22 +391,22 @@ class ReagentItem(pg.TreeWidgetItem):
 
 class SolutionItem(pg.TreeWidgetItem):
     def __init__(self, soln):
-        class SigProxy(QtCore.QObject):
-            sigCopyClicked = QtCore.Signal(object)
-            sigRemoveClicked = QtCore.Signal(object)
+        class SigProxy(qt.QObject):
+            sigCopyClicked = qt.Signal(object)
+            sigRemoveClicked = qt.Signal(object)
         self.__sigprox = SigProxy()
         self.sigCopyClicked = self.__sigprox.sigCopyClicked
         self.sigRemoveClicked = self.__sigprox.sigRemoveClicked
 
         self.solution = soln
         pg.TreeWidgetItem.__init__(self, [soln.name])
-        self.menu = QtWidgets.QMenu()
+        self.menu = qt.QMenu()
         self.menu.addAction('Copy', self.copyClicked)
         self.menu.addAction('Remove', self.removeClicked)
         
     def showContextMenu(self, point):
         tree = self.treeWidget()
-        point = point + QtCore.QPoint(0, tree.header().height())
+        point = point + qt.QPoint(0, tree.header().height())
         pt = tree.mapToGlobal(point)
         self.menu.popup(pt)
         
@@ -422,8 +422,8 @@ class SolutionItem(pg.TreeWidgetItem):
 
 class SolutionTypeItem(pg.TreeWidgetItem):
     def __init__(self):
-        class SigProxy(QtCore.QObject):
-            sigChanged = QtCore.Signal(object)
+        class SigProxy(qt.QObject):
+            sigChanged = qt.Signal(object)
         self._sigprox = SigProxy()
         self.sigChanged = self._sigprox.sigChanged
 
@@ -445,15 +445,15 @@ class SolutionTypeItem(pg.TreeWidgetItem):
 
 class ReverseAgainstItem(pg.TreeWidgetItem):
     def __init__(self):
-        class SigProxy(QtCore.QObject):
-            sigChanged = QtCore.Signal(object)
+        class SigProxy(qt.QObject):
+            sigChanged = qt.Signal(object)
         self._sigprox = SigProxy()
         self.sigChanged = self._sigprox.sigChanged
 
         self.solutions = []
         pg.TreeWidgetItem.__init__(self, ['Reverse against'])
-        self.internalMenu = QtWidgets.QMenu()
-        self.externalMenu = QtWidgets.QMenu()
+        self.internalMenu = qt.QMenu()
+        self.externalMenu = qt.QMenu()
         
     def setSolutions(self, solutions):
         self.solutions = solutions
@@ -473,11 +473,11 @@ class ReverseAgainstItem(pg.TreeWidgetItem):
                     continue
                 if sol.group != grp:
                     grp = sol.group
-                    label = QtWidgets.QLabel(grp)
+                    label = qt.QLabel(grp)
                     font = label.font()
                     font.setWeight(font.Bold)
                     label.setFont(font)
-                    act = QtWidgets.QWidgetAction(menu)
+                    act = qt.QWidgetAction(menu)
                     act.setDefaultWidget(label)
                     menu.addAction(act)
                 menu.addAction("  " + sol.name, self.selectionChanged)
@@ -494,7 +494,7 @@ class ReverseAgainstItem(pg.TreeWidgetItem):
         x = tw.header().sectionPosition(col)
         y = tw.header().height() + tw.visualItemRect(self).bottom()
         menu = self.internalMenu if self.solutions[col-1].type == 'internal' else self.externalMenu
-        menu.popup(tw.mapToGlobal(QtCore.QPoint(x, y)))
+        menu.popup(tw.mapToGlobal(qt.QPoint(x, y)))
         self._activeColumn = col
         return None
 

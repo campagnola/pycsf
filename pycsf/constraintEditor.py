@@ -1,9 +1,10 @@
-from pyqtgraph.Qt import QtWidgets, QtCore
-from .constraintEditorTemplate import Ui_constraintEditor
+from . import qt
+
+Ui_constraintEditor = qt.importTemplate('.constraintEditorTemplate')
 
 
-class ConstraintEditorWidget(QtWidgets.QWidget):
+class ConstraintEditorWidget(qt.QWidget):
     def __init__(self, parent=None):
-        QtWidgets.QWidget.__init__(self, parent)
+        qt.QWidget.__init__(self, parent)
         self.ui = Ui_constraintEditor()
         self.ui.setupUi(self)

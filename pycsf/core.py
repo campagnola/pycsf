@@ -1,13 +1,13 @@
 from collections import OrderedDict
 import os, json, tempfile, weakref
 import numpy as np
-from pyqtgraph.Qt import QtWidgets, QtCore
+from . import qt
 
 
 IONS = OrderedDict([('Na', 1), ('K', 1), ('Cl', -1), ('Ca', 2), ('Mg', 2), ('SO4', -2), ('PO4', -3), ('Cs', 1)])
 
 
-class Reagents(QtCore.QObject):
+class Reagents(qt.QObject):
     """A table of reagents and their properties.
 
     Fields are:
@@ -27,12 +27,12 @@ class Reagents(QtCore.QObject):
     database, we might have used a unique integer ID instead, but in this case
     we want the database json file to be human readable and editable.
     """
-    sigReagentListChanged = QtCore.Signal(object)  # self
-    sigReagentDataChanged = QtCore.Signal(object)  # self
-    sigReagentRenamed = QtCore.Signal(object, object, object)  # self, oldname, newname
+    sigReagentListChanged = qt.Signal(object)  # self
+    sigReagentDataChanged = qt.Signal(object)  # self
+    sigReagentRenamed = qt.Signal(object, object, object)  # self, oldname, newname
     
     def __init__(self, db):
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self.db = db
         self._dtype = [
             ('group', object),
@@ -152,15 +152,15 @@ class Reagent(object):
         return OrderedDict([(n, dtype[n]) for n in dtype.names])
     
 
-class Solutions(QtCore.QObject):
+class Solutions(qt.QObject):
     """Collection of grouped Solutions.
     """
-    solutionListChanged = QtCore.Signal(object)  # self
-    solutionDataChanged = QtCore.Signal(object, object)  # self, solution
+    solutionListChanged = qt.Signal(object)  # self
+    solutionDataChanged = qt.Signal(object, object)  # self, solution
     
     def __init__(self, db):
         self.db = db
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self._data = []
 
     def add(self, soln=None, name=None, group=None, signal=True):
@@ -248,14 +248,14 @@ class Solutions(QtCore.QObject):
             sol.reagentRenamed(old, new)
 
 
-class Solution(QtCore.QObject):
+class Solution(qt.QObject):
     """Defines the list of reagents and their concentrations in a solution.
     """
-    sigSolutionChanged = QtCore.Signal(object)  # self
-    sigRenamed = QtCore.Signal(object, object)  # self, old_name
+    sigSolutionChanged = qt.Signal(object)  # self
+    sigRenamed = qt.Signal(object, object)  # self, old_name
     
     def __init__(self, name=None, group=None, against=None, db=None):
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self.db = db
         self._name = name
         self.group = group
@@ -389,14 +389,14 @@ def _loadRec(arr, rec):
             _loadRec(arr[field], rec[field])
         
 
-class Recipe(QtCore.QObject):
+class Recipe(qt.QObject):
     """Defines a list of volumes for which reagent masses should be calculated
     for a particular solution.
     """
-    sigChanged = QtCore.Signal(object)  # self
+    sigChanged = qt.Signal(object)  # self
     
     def __init__(self, solution=None, volumes=None, notes=None, db=None):
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self.db = db
         self._solution = None
         self.volumes = [] if volumes is None else volumes
@@ -434,13 +434,13 @@ class Recipe(QtCore.QObject):
         return r
 
 
-class RecipeSet(QtCore.QObject):
+class RecipeSet(qt.QObject):
     """Multiple Recipes meant to be displayed together.
     """
-    sigRecipeListChanged = QtCore.Signal(object)  # self
+    sigRecipeListChanged = qt.Signal(object)  # self
     
     def __init__(self, name=None, recipes=None, order=None, stocks=None, db=None):
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self.db = db
         self.name = name
         self._recipes = [] if recipes is None else recipes
@@ -500,13 +500,13 @@ class RecipeSet(QtCore.QObject):
             changed = True
 
 
-class RecipeBook(QtCore.QObject):
+class RecipeBook(qt.QObject):
     """A simple collection of RecipeSets.
     """
-    sigRecipeSetListChanged = QtCore.Signal(object)  # self
+    sigRecipeSetListChanged = qt.Signal(object)  # self
     
     def __init__(self, db=None):
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self.db = db
         self._recipeSets = []
 
@@ -545,9 +545,9 @@ class RecipeBook(QtCore.QObject):
             rset.reagentRenamed(old, new)
 
 
-class SolutionDatabase(QtCore.QObject):
+class SolutionDatabase(qt.QObject):
     def __init__(self):
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self.reagents = Reagents(db=self)
         self.solutions = Solutions(db=self)
         self.recipes = RecipeBook(db=self)
@@ -583,7 +583,7 @@ class SolutionDatabase(QtCore.QObject):
                 fh.close()
             os.rename(tmpfile, filename)
         except Exception as exc:
-            QtWidgets.QMessageBox.warning(None, "ERROR", "File save failed: " + exc.message)
+            qt.QMessageBox.warning(None, "ERROR", "File save failed: " + exc.message)
             if os.path.isfile(tmpfile):
                 os.remove(tmpfile)
             raise

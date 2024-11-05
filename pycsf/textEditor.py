@@ -1,27 +1,27 @@
-from pyqtgraph.Qt import QtWidgets, QtCore
 import re
+from . import qt
 
 
-class RichTextEdit(QtWidgets.QTextEdit):
+class RichTextEdit(qt.QTextEdit):
     def __init__(self, *args):
-        QtWidgets.QTextEdit.__init__(self, *args)
+        qt.QTextEdit.__init__(self, *args)
         self.setToolTip('Formatting keys:<br><b>bold: ctrl-b</b><br><i>italic: ctrl-i</i><br><span style="text-decoration: underline">underline: ctrl-u</span>')
         
     def keyPressEvent(self, ev):
-        if ev.key() == QtCore.Qt.Key_B and ev.modifiers() == QtCore.Qt.ControlModifier:
-            if self.fontWeight() == QtGui.QFont.Normal:
-                self.setFontWeight(QtGui.QFont.Bold)
+        if ev.key() == qt.Qt.Key_B and ev.modifiers() == qt.Qt.ControlModifier:
+            if self.fontWeight() == qt.QFont.Normal:
+                self.setFontWeight(qt.QFont.Bold)
             else:
-                self.setFontWeight(QtGui.QFont.Normal)
-        elif ev.key() == QtCore.Qt.Key_I and ev.modifiers() == QtCore.Qt.ControlModifier:
+                self.setFontWeight(qt.QFont.Normal)
+        elif ev.key() == qt.Qt.Key_I and ev.modifiers() == qt.Qt.ControlModifier:
             self.setFontItalic(not self.fontItalic())
-        elif ev.key() == QtCore.Qt.Key_U and ev.modifiers() == QtCore.Qt.ControlModifier:
+        elif ev.key() == qt.Qt.Key_U and ev.modifiers() == qt.Qt.ControlModifier:
             self.setFontUnderline(not self.fontUnderline())
         else:
-            return QtWidgets.QTextEdit.keyPressEvent(self, ev)
+            return qt.QTextEdit.keyPressEvent(self, ev)
 
     def toHtml(self):
-        html = str(QtWidgets.QTextEdit.toHtml(self))
+        html = str(qt.QTextEdit.toHtml(self))
         
         # Strip off boilerplate html. This should make the JSON easier to
         # read without affecting the text.

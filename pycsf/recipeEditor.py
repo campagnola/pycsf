@@ -2,12 +2,14 @@ import os
 import re
 from collections import OrderedDict
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
+from . import qt
 from .core import RecipeSet, Recipe
 from .treeWidget import AdderItem
 from .textEditor import RichTextEdit
-from .recipeEditorTemplate import Ui_recipeEditor
 from .format_float import formatFloat
+
+Ui_recipeEditor = qt.importTemplate('.recipeEditorTemplate')
+
 """
 TODO:
  - highlight row/column headers for selected cell
@@ -16,7 +18,7 @@ TODO:
 
 
 
-class RecipeEditorWidget(QtWidgets.QWidget):
+class RecipeEditorWidget(qt.QWidget):
     def __init__(self, db, parent=None):
         self.db = db
         self.recipeSet = None
@@ -25,7 +27,7 @@ class RecipeEditorWidget(QtWidgets.QWidget):
         
         self.addSolutionItem = None
         
-        QtWidgets.QWidget.__init__(self, parent)
+        qt.QWidget.__init__(self, parent)
         self.ui = Ui_recipeEditor()
         self.ui.setupUi(self)
         self.ui.hsplitter.setStretchFactor(0, 1)
@@ -39,7 +41,7 @@ class RecipeEditorWidget(QtWidgets.QWidget):
         rsl = self.ui.recipeSetList
         rsl.currentItemChanged.connect(self.currentRecipeSetChanged)
         rsl.setEditTriggers(rsl.SelectedClicked | rsl.DoubleClicked)
-        rsl.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        rsl.setContextMenuPolicy(qt.Qt.CustomContextMenu)
         self.styleDelegate = StyleDelegate(table)
         
         self.updateRecipeSetList()
@@ -177,8 +179,8 @@ class RecipeEditorWidget(QtWidgets.QWidget):
         table.setItem(0, col, self.addSolutionItem)
 
         # Add a row for units
-        label = QtWidgets.QLabel('masses in mg, <span style="color: #0000c8">stock volumes in ml</span>')
-        label.setAlignment(QtCore.Qt.AlignRight)
+        label = qt.QLabel('masses in mg, <span style="color: #0000c8">stock volumes in ml</span>')
+        label.setAlignment(qt.Qt.AlignRight)
         f = label.font()
         f.setPointSize(8)
         label.setFont(f)
@@ -194,13 +196,13 @@ class RecipeEditorWidget(QtWidgets.QWidget):
                 if item is None:
                     item = TableWidgetItem()
                     table.setItem(row, col, item)
-                item.setBackground(QtGui.QColor(*bg))
-                item.borders['bottom'] = QtGui.QPen(QtGui.QColor(50, 50, 50))
+                item.setBackground(qt.QColor(*bg))
+                item.borders['bottom'] = qt.QPen(qt.QColor(50, 50, 50))
 
         for row in range(2, table.rowCount()):
             item = table.item(row, 0)
             if item is not None:
-                item.setBackground(QtGui.QColor(240, 240, 240))
+                item.setBackground(qt.QColor(240, 240, 240))
 
         table.cellChanged.connect(self.cellChanged)
         self.solutionsChanged()
@@ -219,7 +221,7 @@ class RecipeEditorWidget(QtWidgets.QWidget):
         rsl.clear()
         for i, rs in enumerate(self.db.recipes):
             item = RecipeSetItem(rs)
-            item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+            item.setFlags(item.flags() | qt.Qt.ItemIsEditable)
             item.sigCopyClicked.connect(self.recipeSetCopyClicked)
             item.sigRemoveClicked.connect(self.recipeSetRemoveClicked)
             rsl.addTopLevelItem(item)
@@ -243,7 +245,7 @@ class RecipeEditorWidget(QtWidgets.QWidget):
         # select new item
         rsl = self.ui.recipeSetList
         item = rsl.topLevelItem(rsl.topLevelItemCount()-2)
-        rsl.setCurrentItem(item, 0, QtWidgets.QItemSelectionModel.SelectCurrent)
+        rsl.setCurrentItem(item, 0, qt.QItemSelectionModel.SelectCurrent)
             
     def recipeSetItemChanged(self, item, col):
         item.recipeSet.name = str(item.text(0))
@@ -355,11 +357,11 @@ class RecipeEditorWidget(QtWidgets.QWidget):
                         t = str(w.text())
                         fs = w.font().pointSize()
                         a = w.alignment()
-                        if a & QtCore.Qt.AlignRight > 0:
+                        if a & qt.Qt.AlignRight > 0:
                             align = 'right'
-                        elif a & QtCore.Qt.AlignLeft > 0:
+                        elif a & qt.Qt.AlignLeft > 0:
                             align = 'left'
-                        elif a & QtCore.Qt.AlignCenter > 0:
+                        elif a & qt.Qt.AlignCenter > 0:
                             align = 'center'
                         style = 'font-size: %dpt; text-align: %s' % (fs, align)
                 else:
@@ -390,31 +392,31 @@ class RecipeEditorWidget(QtWidgets.QWidget):
         
         # copy to clipboard
         if os.sys.platform in ['darwin']:
-            QtWidgets.QApplication.clipboard().setText(txt)
+            qt.QApplication.clipboard().setText(txt)
         else:
-            md = QtCore.QMimeData()
+            md = qt.QMimeData()
             md.setHtml(txt)
-            QtWidgets.QApplication.clipboard().setMimeData(md)
+            qt.QApplication.clipboard().setMimeData(md)
 
 
-class StyleDelegate(QtWidgets.QStyledItemDelegate):
+class StyleDelegate(qt.QStyledItemDelegate):
     def __init__(self, table):
-        QtWidgets.QStyledItemDelegate.__init__(self)
+        qt.QStyledItemDelegate.__init__(self)
         self.table = table
     
     def paint(self, painter, option, index):
-        QtWidgets.QStyledItemDelegate.paint(self, painter, option, index)
+        qt.QStyledItemDelegate.paint(self, painter, option, index)
         item = self.table.item(index.row(), index.column())
         if hasattr(item, 'paint'):
             item.paint(painter, option)
             
 
-class TableWidgetItem(QtWidgets.QTableWidgetItem):
+class TableWidgetItem(qt.QTableWidgetItem):
     def __init__(self, *args):
-        QtWidgets.QTableWidgetItem.__init__(self, *args)
+        qt.QTableWidgetItem.__init__(self, *args)
         # need this because cells report their background incorrectly
         # if it hasn't been set
-        self.setBackground(QtGui.QColor(255, 255, 255))
+        self.setBackground(qt.QColor(255, 255, 255))
         self.borders = {}
         
     def paint(self, painter, option):
@@ -431,12 +433,12 @@ class TableWidgetItem(QtWidgets.QTableWidgetItem):
             painter.drawLine(a, b)
 
 
-class SolutionItemGroup(QtCore.QObject):
-    sigRecipeChanged = QtCore.Signal(object)  # self
-    sigSolutionChanged = QtCore.Signal(object, object)  # self, soln
+class SolutionItemGroup(qt.QObject):
+    sigRecipeChanged = qt.Signal(object)  # self
+    sigSolutionChanged = qt.Signal(object, object)  # self, soln
     
     def __init__(self, table, recipeSet, recipe, db, showConc=False):
-        QtCore.QObject.__init__(self)
+        qt.QObject.__init__(self)
         self.db = db
         self.table = table
         self.recipe = recipe
@@ -472,8 +474,8 @@ class SolutionItemGroup(QtCore.QObject):
             
         for j, vol in enumerate(self.recipe.volumes):
             vitem = EditableItem('%d' % vol)
-            #vitem.setBackgroundColor(QtGui.QColor(240, 240, 240))
-            #vitem.borders['bottom'] = QtGui.QPen(QtGui.QColor(50, 50, 50))
+            #vitem.setBackgroundColor(qt.QColor(240, 240, 240))
+            #vitem.borders['bottom'] = qt.QPen(qt.QColor(50, 50, 50))
             self.volumeItems.append(vitem)
             self.table.setItem(1, col+j, vitem)
             vitem.sigChanged.connect(self.volumeChanged)
@@ -485,13 +487,13 @@ class SolutionItemGroup(QtCore.QObject):
         self.updateMasses()
             
         self.addVolumeItem = TableAdderItem()
-        #self.addVolumeItem.setBackgroundColor(QtGui.QColor(240, 240, 240))
-        #self.addVolumeItem.borders['bottom'] = QtGui.QPen(QtGui.QColor(50, 50, 50))
+        #self.addVolumeItem.setBackgroundColor(qt.QColor(240, 240, 240))
+        #self.addVolumeItem.borders['bottom'] = qt.QPen(qt.QColor(50, 50, 50))
         
         for row in range(len(self.reagentOrder) + 2):
             item = self.table.item(row, self.column)
             if item is not None:
-                item.borders['left'] = QtGui.QPen(QtGui.QColor(0, 0, 0))
+                item.borders['left'] = qt.QPen(qt.QColor(0, 0, 0))
         
         self.addVolumeItem.sigClicked.connect(self.addVolumeClicked)
         self.table.setItem(1, col+len(self.recipe.volumes), self.addVolumeItem)    
@@ -506,11 +508,11 @@ class SolutionItemGroup(QtCore.QObject):
                     mw = self.db.reagents[reagent]['molweight']
                     mass = float((vol * 1e-3) * (conc * 1e-3) * (mw * 1e3))
                     item.setText(formatFloat(mass))
-                    item.setForeground(QtGui.QColor(0, 0, 0))
+                    item.setForeground(qt.QColor(0, 0, 0))
                 else:
                     rvol = float((vol * 1e-3) * (conc * 1e-3) / (stock * 1e-3))
                     item.setText(formatFloat(rvol))
-                    item.setForeground(QtGui.QColor(0, 0, 200))
+                    item.setForeground(qt.QColor(0, 0, 200))
         
     def addVolumeClicked(self):
         self.recipe.volumes.append(100)
@@ -542,18 +544,18 @@ class SolutionItemGroup(QtCore.QObject):
 
 class SolutionItem(TableWidgetItem):
     def __init__(self, soln='+', removable=True):
-        class SigProxy(QtCore.QObject):
-            sigChanged = QtCore.Signal(object, object)
+        class SigProxy(qt.QObject):
+            sigChanged = qt.Signal(object, object)
         self._sigprox = SigProxy()
         self.sigChanged = self._sigprox.sigChanged
 
         self.removable = removable
         TableWidgetItem.__init__(self, soln)
-        self.menu = QtWidgets.QMenu()
-        self.setTextAlignment(QtCore.Qt.AlignCenter)
-        #self.borders['bottom'] = QtGui.QPen(QtGui.QColor(50, 50, 50))
-        self.borders['left'] = QtGui.QPen(QtGui.QColor(0, 0, 0))
-        #self.setBackgroundColor(QtGui.QColor(230, 230, 230))
+        self.menu = qt.QMenu()
+        self.setTextAlignment(qt.Qt.AlignCenter)
+        #self.borders['bottom'] = qt.QPen(qt.QColor(50, 50, 50))
+        self.borders['left'] = qt.QPen(qt.QColor(0, 0, 0))
+        #self.setBackgroundColor(qt.QColor(230, 230, 230))
         
     def setAllSolutions(self, solutions):
         # list of solutions to show in dropdown menu
@@ -570,11 +572,11 @@ class SolutionItem(TableWidgetItem):
             
         # create group / solution entries
         for grp, solns in grps.items():
-            label = QtWidgets.QLabel(grp)
+            label = qt.QLabel(grp)
             font = label.font()
             font.setWeight(font.Bold)
             label.setFont(font)
-            act = QtWidgets.QWidgetAction(self.menu)
+            act = qt.QWidgetAction(self.menu)
             act.setDefaultWidget(label)
             self.menu.addAction(act)
             for soln in solns:
@@ -590,18 +592,18 @@ class SolutionItem(TableWidgetItem):
         tw = self.tableWidget()
         x = tw.verticalHeader().width() + tw.horizontalHeader().sectionPosition(tw.column(self))
         y = tw.horizontalHeader().height() + tw.visualItemRect(self).bottom()
-        self.menu.popup(tw.mapToGlobal(QtCore.QPoint(x, y)))
+        self.menu.popup(tw.mapToGlobal(qt.QPoint(x, y)))
 
 
 class TableAdderItem(TableWidgetItem):
     def __init__(self):
-        class SigProxy(QtCore.QObject):
-            sigClicked = QtCore.Signal(object)
+        class SigProxy(qt.QObject):
+            sigClicked = qt.Signal(object)
         self.__sigprox = SigProxy()
         self.sigClicked = self.__sigprox.sigClicked
 
         TableWidgetItem.__init__(self, '+')
-        self.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.setTextAlignment(qt.Qt.AlignCenter)
         
     def itemClicked(self):
         self.sigClicked.emit(self)
@@ -609,8 +611,8 @@ class TableAdderItem(TableWidgetItem):
 
 class EditableItem(TableWidgetItem):
     def __init__(self, text):
-        class SigProxy(QtCore.QObject):
-            sigChanged = QtCore.Signal(object)
+        class SigProxy(qt.QObject):
+            sigChanged = qt.Signal(object)
         self.__sigprox = SigProxy()
         self.sigChanged = self.__sigprox.sigChanged
 
@@ -620,16 +622,16 @@ class EditableItem(TableWidgetItem):
         self.sigChanged.emit(self)
 
 
-class LabeledLineEdit(QtWidgets.QWidget):
+class LabeledLineEdit(qt.QWidget):
     def __init__(self, label, parent):
-        QtWidgets.QWidget.__init__(self, parent)
-        self.layout = QtWidgets.QGridLayout()
+        qt.QWidget.__init__(self, parent)
+        self.layout = qt.QGridLayout()
         self.setLayout(self.layout)
         self.layout.setSpacing(2)
         self.layout.setContentsMargins(3, 3, 3, 3)
-        self.label = QtWidgets.QLabel(label)
+        self.label = qt.QLabel(label)
         self.layout.addWidget(self.label, 0, 0)
-        self.text = QtWidgets.QLineEdit()
+        self.text = qt.QLineEdit()
         self.layout.addWidget(self.text, 1, 0)
         
         self.editingFinished = self.text.editingFinished
@@ -637,16 +639,16 @@ class LabeledLineEdit(QtWidgets.QWidget):
 
 class ReagentItem(TableWidgetItem):
     def __init__(self, reagent, stock):
-        class SigProxy(QtCore.QObject):
-            sigStockConcentrationChanged = QtCore.Signal(object, object)
+        class SigProxy(qt.QObject):
+            sigStockConcentrationChanged = qt.Signal(object, object)
         self.__sigprox = SigProxy()
         self.sigStockConcentrationChanged = self.__sigprox.sigStockConcentrationChanged
 
         TableWidgetItem.__init__(self, '')
         self.reagent = reagent
         
-        self.menu = QtWidgets.QMenu()
-        self.action = QtWidgets.QWidgetAction(self.menu)
+        self.menu = qt.QMenu()
+        self.action = qt.QWidgetAction(self.menu)
         self.concEdit = LabeledLineEdit('Stock concentration:', self.menu)
         self.concEdit.text.setPlaceholderText('[ none ]')
         if stock is not None:
@@ -665,7 +667,7 @@ class ReagentItem(TableWidgetItem):
         tw = self.tableWidget()
         x = tw.verticalHeader().width() + tw.horizontalHeader().sectionPosition(tw.column(self))
         y = tw.horizontalHeader().height() + tw.visualItemRect(self).bottom()
-        self.menu.popup(tw.mapToGlobal(QtCore.QPoint(x, y)))
+        self.menu.popup(tw.mapToGlobal(qt.QPoint(x, y)))
         
     def stockTextChanged(self):
         t = str(self.concEdit.text.text())
@@ -678,18 +680,18 @@ class ReagentItem(TableWidgetItem):
         self.menu.hide()
 
 
-class RecipeSetItem(QtWidgets.QTreeWidgetItem):
+class RecipeSetItem(qt.QTreeWidgetItem):
     def __init__(self, rset):
-        class SigProxy(QtCore.QObject):
-            sigCopyClicked = QtCore.Signal(object)
-            sigRemoveClicked = QtCore.Signal(object)
+        class SigProxy(qt.QObject):
+            sigCopyClicked = qt.Signal(object)
+            sigRemoveClicked = qt.Signal(object)
         self.__sigprox = SigProxy()
         self.sigCopyClicked = self.__sigprox.sigCopyClicked
         self.sigRemoveClicked = self.__sigprox.sigRemoveClicked
 
         self.recipeSet = rset
-        QtWidgets.QTreeWidgetItem.__init__(self, [rset.name])
-        self.menu = QtWidgets.QMenu()
+        qt.QTreeWidgetItem.__init__(self, [rset.name])
+        self.menu = qt.QMenu()
         self.menu.addAction('Copy', self.copyClicked)
         self.menu.addAction('Remove', self.removeClicked)
         

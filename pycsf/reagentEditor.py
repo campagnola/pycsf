@@ -1,22 +1,23 @@
 from collections import OrderedDict
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtWidgets, QtCore
+from . import qt
 from .treeWidget import GroupItem, ItemDelegate
-from .reagentEditorTemplate import Ui_reagentEditor
+
+Ui_reagentEditor = qt.importTemplate('.reagentEditorTemplate')
 
 
-class ReagentEditorWidget(QtWidgets.QWidget):
+class ReagentEditorWidget(qt.QWidget):
     def __init__(self, db, parent=None):
         self.db = db
         self.reagents = db.reagents
-        QtWidgets.QWidget.__init__(self, parent)
+        qt.QWidget.__init__(self, parent)
         self.ui = Ui_reagentEditor()
         self.ui.setupUi(self)
         self.ui.splitter.setStretchFactor(0, 4)
         self.ui.splitter.setStretchFactor(1, 1)
 
         tree = self.ui.reagentTree
-        tree.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
+        tree.setSelectionBehavior(qt.QAbstractItemView.SelectItems)
         self.itemDelegate = ItemDelegate(tree)  # allow items to specify their own editors
         tree.itemSelectionChanged.connect(self.selectionChanged)
         self.ui.reagentNotes.textChanged.connect(self.notesChanged)
@@ -30,7 +31,7 @@ class ReagentEditorWidget(QtWidgets.QWidget):
         if len(selection) != 1:
             return
         item, col = tree.itemFromIndex(selection[0])
-        if item.flags() & QtCore.Qt.ItemIsEditable == QtCore.Qt.ItemIsEditable:
+        if item.flags() & qt.Qt.ItemIsEditable == qt.Qt.ItemIsEditable:
             tree.editItem(item, col)
             
         if isinstance(item, ReagentItem):
@@ -102,10 +103,10 @@ class ReagentEditorWidget(QtWidgets.QWidget):
             
 
 
-class ReagentItem(QtWidgets.QTreeWidgetItem):
+class ReagentItem(qt.QTreeWidgetItem):
     def __init__(self, reagent):
-        class SigProxy(QtCore.QObject):
-            sigChanged = QtCore.Signal(object, object, object)  # self, field, value
+        class SigProxy(qt.QObject):
+            sigChanged = qt.Signal(object, object, object)  # self, field, value
         self._sigprox = SigProxy()
         self.sigChanged = self._sigprox.sigChanged
 
@@ -114,11 +115,11 @@ class ReagentItem(QtWidgets.QTreeWidgetItem):
         self.fields = OrderedDict([(f,fields[f]) for f in fields if f != 'group'])
         
         strs = [str(reagent[f]) for f in self.fields]
-        QtWidgets.QTreeWidgetItem.__init__(self, strs)
-        self.setFlags(self.flags() | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable)
+        qt.QTreeWidgetItem.__init__(self, strs)
+        self.setFlags(self.flags() | qt.Qt.ItemIsEnabled | qt.Qt.ItemIsEditable | qt.Qt.ItemIsSelectable)
 
     def createEditor(self, parent, option, col):
-        return QtWidgets.QLineEdit(parent)
+        return qt.QLineEdit(parent)
     
     def setEditorData(self, editor, col):
         editor.setText(self.text(col))
