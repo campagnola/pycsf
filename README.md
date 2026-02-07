@@ -31,5 +31,5 @@ Requirements
 
 * Python 3
 * numpy
-* PyQt5
+* PyQt5 or PyQt6 (install one; `pycsf/qt.py` selects the available backend)
 * pyqtgraph

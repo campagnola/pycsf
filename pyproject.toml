@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pycsf"
+version = "1.0"
+description = "API and user interface for managing a database of experimental reagents, solutions, and recipes."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "Allen Institute Software License"}
+authors = [
+  {name = "Luke Campagnola", email = "lukec@alleninstitute.org"},
+]
+keywords = ["acsf", "solution", "reagent", "recipe", "editor"]
+dependencies = [
+  "numpy",
+  "pyqtgraph",
+]
+
+[project.optional-dependencies]
+qt5 = ["PyQt5"]
+qt6 = ["PyQt6"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pycsf*"]
+
+[tool.setuptools.package-data]
+pycsf = ["*.ui"]
